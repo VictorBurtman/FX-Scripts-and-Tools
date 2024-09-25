@@ -1,0 +1,89 @@
+/*
+
+This script multiplies the particle's velocity by a texmap. The black and white value of the nearest point of the chosen surface object is used as a multiplier.
+
+You need to add one texture in the  Script Accessible Texmaps List rollout and one object in the Script Accessible Object List rollout. If there are several objects, the nearest one will be used to influence the particles. 
+
+By default, the script will affect the particles on event entry, but you can extend the number of frame in the script Floats rollout (Frame Duration), which means you don't have to go into the script to change the values.
+
+
+*/
+
+
+public void simulationStart()
+{
+
+}
+
+public void simulationStep()
+{	
+	for (int i = 0; i < eventParticleCount; i++) //this for-loop iterates through all particles in this event				
+	{
+		int sInx = tf.GetSimIndex(i); 
+		float eventAge = tf.GetEventAge(sInx); 
+		
+		if (eventAge <= (int)GetFloat("Frame Duration")) 	
+		{
+			/////////////////FIND THE CLOSEST OBJECT////////////////////////
+			Point3 pos = tf.GetPos(sInx); // We get the particle position
+			List<float> closestPointList = new List<float>(); // We set a float list to store all the distances
+			float distance = new float(); // We set a variable to store the minimum distance while we loop threw each object
+			
+			for (int o = 0; o < objects.Count; o++) // We loop through each object
+			{
+				Point3 ClosestPointPos = objects[o].GetClosestPoint(pos); // We get the nearest point position on the object
+				float currentDist = Point3.Distance(ClosestPointPos, pos); // We determine the distance value between this point and the particle
+				closestPointList.Add(currentDist); // We add the result to the list and to the variable
+				if (o == 0) {distance = currentDist;}
+				else {if (currentDist < distance){distance = currentDist;}} // If the result is lower than the precedent object, we update the variable. 
+			}
+			int index = closestPointList.IndexOf(distance); // Find the index corresponding to the founded result in the list
+			tfObj closestObject = objects[index]; // This index can be used to find the nearest object.
+			///////////////////////////////////////////////////////////////////////////////////////////////
+			
+			Point2 surfaceUV = closestObject.GetClosestUV(pos, 1); //then we query obj001 for the UV coordinate closest to our position
+			float color = tex001.GetMonoVal(t, surfaceUV); //then we query tex001 for the mono color value at that UV coordinate
+			
+			tf.SetVel(sInx, (tf.GetVel(sInx) * color) * GetFloat("Speed Multiplier")); // multiply velocity by texmap value
+		}
+	}
+}
+
+public void simulationStepThreaded(int startInx, int endInx, int threadInx)					
+{
+	/*
+	This function allows for multi-threaded particle 
+	scripting. It is disabled by default. To switch to threaded 
+	mode, call 'tf.SetThreaded(true);' in 'simulationStart'.
+
+	The arguments 'startInx' and 'endInx' point to the start
+	and end index of a chunk of event particles that each 
+	thread will process in parallel.
+
+	The argument 'threadInx' is the index of the current thread.
+
+	If you want to have simulationStepThreaded evaluate multiple
+	times in the same time step (ex: you are multithreading an 
+	iterative solver), you can call tf.SetThreadedIterations(n) to
+	set the number of times the threads will re-evaluate this function.
+	The iterator will wait for all threads to complete their tasks 
+	before starting the next iteration. tf.GetThreadedIteration() 
+	can	be called to determine the current iteration of the 
+	iteration loop.
+
+	Please make sure you understand the limits of 
+	multithreading in 3dsmax before enabling this feature!						
+	*/
+}
+
+public void postSimulationStep()
+{
+	/*
+	This single-threaded function is called after simulationStep and 
+	simulationStepThreaded. Its main purpose is to provide a place 
+	to process and synchronize data collected by multiple threads 
+	after the call to simulationStepThreaded is complete.
+	*/
+}
+
+//__END__
