@@ -2,7 +2,7 @@ try (destroydialog tyPropertiesRollout)catch()
 IsTFInstalled = true
 try (tyPropMod = tyProperties()) catch (IsTFInstalled = false) -- we test if tyflow is installed
 local title = "tyProperties Objects IDs"
-rollout tyPropertiesRollout "tyProperties to ObjID" height:145 width:200
+rollout tyPropertiesRollout title height:145 width:200
 (
 	groupbox grp1 pos:[20,5] height:88 width:160
 	radioButtons rdR "Stack modifier position" labels:#("top", "bottom") default:1 columns:2 align:#left tooltip:"" pos:[47,20]
