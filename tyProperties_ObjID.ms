@@ -1,6 +1,7 @@
 try (destroydialog tyPropertiesRollout)catch()
 IsTFInstalled = true
 try (tyPropMod = tyProperties()) catch (IsTFInstalled = false) -- we test if tyflow is installed
+local title = "tyProperties Objects IDs"
 rollout tyPropertiesRollout "tyProperties to ObjID" height:145 width:200
 (
 	groupbox grp1 pos:[20,5] height:88 width:160
@@ -24,8 +25,8 @@ rollout tyPropertiesRollout "tyProperties to ObjID" height:145 width:200
 				tyPropModUnique.customFloatChannel = "ObjID"
 				
 			)
-			messagebox ("tyProperties modifiers has been assigned to the current selection with a channel named \"ObjID\" whose values corresponds to the objects IDs.\n\nUse this Channel into a tyFlow export particle operator (Objects export mode) in order to keep properly the objects IDs on the exported nodes.") title:"tyProperties Objects IDs"
-		) else messagebox("Nothing is selected")title:"tyProperties Objects IDs"
+			messagebox ("tyProperties modifiers has been assigned to the current selection with a channel named \"ObjID\" whose values corresponds to the objects IDs.\n\nUse this Channel into a tyFlow export particle operator (Objects export mode) in order to keep properly the objects IDs on the exported nodes.") title:title
+		) else messagebox("Nothing is selected")title:title
 	)
 	
 	on del_btn pressed do 
@@ -40,11 +41,11 @@ rollout tyPropertiesRollout "tyProperties to ObjID" height:145 width:200
 					if ((classOf theNode.modifiers[index]) == tyProperties) do (deleteModifier theNode index ; numberdel +=1)
 				)
 			)
-			messagebox (numberdel as string + " tyProperties has been deleted") title:"tyProperties Objects IDs"
+			messagebox (numberdel as string + " tyProperties has been deleted") title:title
 			gc()
 		)
 	)
 )
-if IsTFInstalled == true then createdialog tyPropertiesRollout else messagebox ("Please install tyFlow plugin in order to use the tyProperties modifier")title:"tyProperties Objects IDs"
+if IsTFInstalled == true then createdialog tyPropertiesRollout else messagebox ("Please install tyFlow plugin in order to use the tyProperties modifier")title:title
 
 
