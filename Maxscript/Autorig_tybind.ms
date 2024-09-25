@@ -1,3 +1,11 @@
+/*==========================
+||  Autorig tyBind 
+||  Create a tyBind helper for each selected object that has a parent. Useful in a tyActor worflow. 
+||	tyFlow plugin is required 
+||  Author: Victor Burtman 
+||  www.victorburtman.com 
+==========================*/
+
 title = "Auto RIG tyBind"
 try(DestroyDialog AutotyBindRollout)catch()
 rollout AutotyBindRollout title
