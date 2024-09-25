@@ -1,0 +1,71 @@
+public void simulationStart()
+{
+
+}
+
+public void simulationStep()
+{	
+	
+	for (int i = 0; i < eventParticleCount; i++) 			
+	{
+		int sInx = tf.GetSimIndex(i);
+
+		float eventAge = tf.GetEventAge(sInx);
+
+		if (eventAge == 0) //in this example, we only want to modify particles that are new in this event					
+		{
+			Point3 scale = tf.GetScale(sInx); // We get the particle's scale 
+			
+			tfMesh MyMesh = tf.GetMesh(sInx); // We get their mesh
+			tfBounds MyBounds = MyMesh.GetBounds(); // We get the size of the bounding box
+			
+			Point3 BoundsMax = MyBounds.max; 
+			BoundsMax.x = BoundsMax.x * scale.x; // Then we multiply each axis of the bb by its corresponding scale axis
+			BoundsMax.y = BoundsMax.y* scale.y; // Because by default bounding box doesn't factor the particle scale
+			BoundsMax.z = BoundsMax.z * scale.z;
+
+			Point3 pos = tf.GetPos(sInx); 
+			pos.z = pos.z + BoundsMax.z ; // We add to the current position the Z bounding box. 
+			tf.SetPos(sInx, pos); // We set a new position 
+		}		
+	}	
+}
+
+public void simulationStepThreaded(int startInx, int endInx, int threadInx)					
+{
+	/*
+	This function allows for multi-threaded particle 
+	scripting. It is disabled by default. To switch to threaded 
+	mode, call 'tf.SetThreaded(true);' in 'simulationStart'.
+
+	The arguments 'startInx' and 'endInx' point to the start
+	and end index of a chunk of event particles that each 
+	thread will process in parallel.
+
+	The argument 'threadInx' is the index of the current thread.
+
+	If you want to have simulationStepThreaded evaluate multiple
+	times in the same time step (ex: you are multithreading an 
+	iterative solver), you can call tf.SetThreadedIterations(n) to
+	set the number of times the threads will re-evaluate this function.
+	The iterator will wait for all threads to complete their tasks 
+	before starting the next iteration. tf.GetThreadedIteration() 
+	can	be called to determine the current iteration of the 
+	iteration loop.
+
+	Please make sure you understand the limits of 
+	multithreading in 3dsmax before enabling this feature!						
+	*/
+}
+
+public void postSimulationStep()
+{
+	/*
+	This single-threaded function is called after simulationStep and 
+	simulationStepThreaded. Its main purpose is to provide a place 
+	to process and synchronize data collected by multiple threads 
+	after the call to simulationStepThreaded is complete.
+	*/
+}
+
+//__END__
