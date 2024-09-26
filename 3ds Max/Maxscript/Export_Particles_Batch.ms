@@ -14,11 +14,9 @@ try(DestroyDialog tyFlowExport) catch()
 tfs = #() -- tyFlows in the scene
 selectedTfs = #() -- tyFlows selected in the list
 
---for i in objects where classof i.baseObject == tyFlow do append tfs i
-	
 modes = #(#("Objects","none","none","exportObjects"),#("PRT",".prt","PRTFilename","exportPRT"),#("tyCache",".tyc","tyCacheFilename","exportTyCache"),#("Alembic Point Cloud",".abc","alembicFilename","exportAlembic_PC"),#("Alembic Mesh",".abc","alembicMeshFilename","exportAlembic_Mesh"),#("VRay Proxy",".vrmesh", "vrmeshFilename","exportVRay"),#("tyCache Splines",".tyc","tyCacheFilename","exportTyCache"))	
 
-rollout tyFlowExport title height:540 width:260
+rollout tyFlowExport title height:570 width:260
 (
 	multiListBox mlb "tyFlow(s) in scene"
 	button refreshBtn "Refresh" pos:[20,165]
@@ -97,12 +95,14 @@ rollout tyFlowExport title height:540 width:260
 
 rollout createExport "CREATE OPERATORS" 
 (
-	checkbox conditionChk "Only if no Export Operator is found" checked:true tooltip:"Only add an Export Particles operator in the flows that don't already have one"
-	dropdownlist exportTypeDrp "" width:130 enabled:True pos:[12,30]
-	radiobuttons pathRdb "Export Path" labels:#("Scene Folder", "Custom Path") columns:1 default:1 offsets:#([0,3], [0,7])  pos:[13,60]
-	button pathBtn "Export Folder..." width:100 height:20 enabled:false tooltip:"" pos:[115,95]
 	
-	button createExportOperator "Create Export Operators" width:200 height:50 pos:[12,130] 
+	dropdownlist exportTypeDrp "" width:130 enabled:True pos:[12,10]
+	radiobuttons pathRdb "Export Path" labels:#("Scene Folder", "Custom Path") columns:1 default:1 offsets:#([0,3], [0,7])  pos:[13,40]
+	button pathBtn "Export Folder..." width:100 height:20 enabled:false tooltip:"" pos:[115,74]
+	checkbox conditionChk "Only if no Export Operator is found" checked:true  pos:[13,110] tooltip:"Only add an Export Particles operator in the flows that don't already have one"
+	checkbox launchExportChk "Launch the exports" pos:[13,130] checked:false tooltip:"Each Export Operator that have been created will also be executed"
+
+	button createExportOperator "Create Export Operators" width:200 height:50 pos:[12,160] 
 	
 	local folder = maxfilepath
 	
@@ -119,7 +119,6 @@ rollout createExport "CREATE OPERATORS"
 		pathBtn.enabled = state
 	)
 	
-
 	on pathBtn pressed do 
 	(
 		folder = getSavepath initialDir:maxfilepath
@@ -153,6 +152,8 @@ rollout createExport "CREATE OPERATORS"
 	(
 		count = 0
 		check = true
+		exportOps = #()
+		messageComplete = ""
 		if selectedTfs.count > 0 then
 		(
 			if maxfilepath == "" and pathRdb.state == 1 do
@@ -194,22 +195,33 @@ rollout createExport "CREATE OPERATORS"
 						expt = ev1.addOperator "export particles" -1
 						
 						
-						if (modes[exportTypeDrp.selection][2]) !="none" do
+						if (modes[exportTypeDrp.selection][2]) !="none" do --for every export operators except objects
 						(
-							exportPath = folder + "\\" + i.name + "\\export_" + modes[exportTypeDrp.selection][2] -- define export path
+							exportPath = folder + "\\" + i.name + "\\export_" + modes[exportTypeDrp.selection][2] -- define the export path
 							expt.exportMode = exportTypeDrp.selection as integer -1 --define the type of export
-							setProperty expt modes[exportTypeDrp.selection][3] exportPath
+							setProperty expt modes[exportTypeDrp.selection][3] exportPath -- set the export path
+							append exportOps expt
 						)
 						count += 1
 					)
 				)
-				messagebox (count as string + " Export Particles Operators has been created")title:title
+				
+				if launchExportChk.state == 1 do
+				(
+					for i in exportOps do
+					(
+						mode = getProperty i "exportMode" -- get its mode (tyCache, PRT...)
+						export = getProperty i modes[mode+1][4] -- retrieve the right function
+						export() --execute the export function
+					)
+					messageComplete = " and executed."
+				)
+				messagebox (count as string + " Export Particles Operators has been created" + messageComplete)title:title
+				
 			)
 		)
 		else messagebox("Selection is empty")title:title
 	)
-	
-	
 )
 
 rollout Export "EXPORT THE PARTICLES" 
@@ -256,8 +268,6 @@ rollout Export "EXPORT THE PARTICLES"
 			messageBox(count as string + " Export Particles have been proceed")title:title
 		)
 		else messagebox("Selection is empty")title:title
-		
-		
 	)
 )
 
@@ -265,3 +275,8 @@ createdialog tyFlowExport
 AddSubRollout tyFlowExport.displayParam createExport rolledUp:false
 AddSubRollout tyFlowExport.displayParam Export rolledUp:false
 tyFlowExport.displayParam.height += 500
+
+
+
+
+
