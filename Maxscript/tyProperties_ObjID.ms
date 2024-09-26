@@ -1,7 +1,7 @@
 try (destroydialog tyPropertiesRollout)catch()
 IsTFInstalled = true
 try (tyPropMod = tyProperties()) catch (IsTFInstalled = false) -- we test if tyflow is installed
-local title = "tyProperties Objects IDs"
+title = "tyProperties Objects IDs"
 rollout tyPropertiesRollout title height:145 width:200
 (
 	groupbox grp1 pos:[20,5] height:88 width:160
