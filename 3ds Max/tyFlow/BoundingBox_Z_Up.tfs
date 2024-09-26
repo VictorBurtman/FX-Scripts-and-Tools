@@ -1,3 +1,10 @@
+/*==========================
+||  Bounding Box Z Up
+||  Readjust z position. Usefull to place particles right on a surface, if their pivot is at the center of their mesh.
+||  Author: Victor Burtman 
+||  www.victorburtman.com 
+==========================*/
+
 public void simulationStart()
 {
 

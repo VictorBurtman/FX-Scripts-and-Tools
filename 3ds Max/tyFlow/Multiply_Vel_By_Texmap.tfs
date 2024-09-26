@@ -1,14 +1,13 @@
-/*
-
-This script multiplies the particle's velocity by a texmap. The black and white value of the nearest point of the chosen surface object is used as a multiplier.
-
-You need to add one texture in the  Script Accessible Texmaps List rollout and one object in the Script Accessible Object List rollout. If there are several objects, the nearest one will be used to influence the particles. 
-
-By default, the script will affect the particles on event entry, but you can extend the number of frame in the script Floats rollout (Frame Duration), which means you don't have to go into the script to change the values.
-
-
-*/
-
+/*==========================
+||  Multiply Velocity By Texmap
+||  Multiplies the particle's velocity by a texmap. 
+||	The black and white value of the nearest point of the chosen surface object is used as a multiplier.
+||	Add one texture in the Script Accessible Texmaps List rollout and one object in the Script Accessible Object List rollout
+||	If there are several objects, the nearest one will be used to influence the particles. 
+||	Make sure to have "Speed Multiplier" and "Frame Duration" exposed as accessible floats values.
+||  Author: Victor Burtman 
+||  www.victorburtman.com 
+==========================*/
 
 public void simulationStart()
 {
