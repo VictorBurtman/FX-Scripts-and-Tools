@@ -21,7 +21,6 @@ rollout Collapse_Map_Subv2 titleMessagebox width:188 height:430
 	local Etat_ShowViewport = on
 	local Amount_selfillu = 100
 	local ColorA = color 85 85 85
-	local 
 	groupbox grp_General "General Settings" height:225 width:178 pos:[5,8]
 	groupbox grp_Standard "Material Settings" height:88 width:208 pos:[5,238]
 	

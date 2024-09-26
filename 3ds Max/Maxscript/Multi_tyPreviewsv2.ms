@@ -643,7 +643,7 @@ rollout test "Multi-Files tyPreviews" width:520 height:510
 						(
 							newtyCache = tyCache()
 							newtyCache.filename = i
-							newtyCache.clamp = on
+							newtyCache.clampFrameRange = on
 							newtyCache.keepInMemory = off
 								
 							-------
@@ -676,8 +676,8 @@ rollout test "Multi-Files tyPreviews" width:520 height:510
 							
 							if (amin ArrNumberSequence2) != undefined then minVal = amin ArrNumberSequence2 as integer else minVal = 0 -- et on regarde le min et le max pour regler la timeline et la lecture du xmesh
 							if (amax ArrNumberSequence2) != undefined then maxVal = amax ArrNumberSequence2 as integer else maxVal = 100
-							newtyCache.clamp_start = minVal
-							newtyCache.clamp_end = maxVal
+							newtyCache.clampFrameRangeStart = minVal
+							newtyCache.clampFrameRangeEnd = maxVal
 							myInterval = interval (minVal - 10) (maxVal + 10)
 							animationRange = myInterval
 							sliderTime = maxVal / 2

@@ -43,10 +43,12 @@ rollout tyPropertiesRollout title height:230 width:200
 				if typrop_chk.checked == True do
 				(
 					tyPropModUnique = copy tyPropMod
-					tyPropModUnique.name = "tyProperties (Mat_ID)" ; tyPropModUnique.custFloatChannels.count = 1 ; tyPropModUnique.custFloatVals.count = 1
-					tyPropModUnique.custFloatVals[1] = i
-					tyPropModUnique.custFloatChannels[1] = "Multi_ID"
+					tyPropModUnique.name = "tyProperties (Mat_ID)" ; 
 					if rdR.state == 1 then (addModifier current_object tyPropModUnique) else (addmodifier current_object tyPropModUnique before:(current_object.modifiers.count))
+					-------
+					tyPropModUnique.addNewListItem()
+					tyPropModUnique.customfloatvalue = i
+					tyPropModUnique.customFloatChannel = "Multi_ID"
 				)
 			)
 			Multisub.materialList = material_list

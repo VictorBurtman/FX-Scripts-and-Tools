@@ -59,7 +59,6 @@ rollout tyPropertiesRollout title height:230 width:200
 						)
 						if typrop_chk.checked == True do
 						(
-							
 							tyPropModUnique = copy tyPropMod
 							tyPropModUnique.name = "tyProperties (MatSwitcher)" ; tyPropModUnique.custFloatChannels.count = 1 ; tyPropModUnique.custFloatVals.count = 1
 							tyPropModUnique.custFloatVals[1] = valInArr
