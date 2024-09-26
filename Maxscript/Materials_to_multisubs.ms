@@ -1,3 +1,11 @@
+/*==========================
+||  Materials to Multisub 
+||  Combine the materials of each selected object into a multisub.
+||	Can assign a tyProperties modifier to each object with a custom float value corresponding to their material location in the multisub.
+||  Author: Victor Burtman 
+||  www.victorburtman.com 
+==========================*/
+
 title = "Materials to Multisub"	
 try (destroydialog tyPropertiesRollout)catch()
 IsTFInstalled = true
@@ -10,7 +18,7 @@ rollout tyPropertiesRollout title height:230 width:200
 	
 	button ok_btn "CREATE Multisub" pos:[47,20] width:110 tooltip:"Combine the materials of each selected object into a multisub."
 	
-	Checkbox typrop_chk "Assign tyProperties" checked:on pos:[47,55] tooltip:"Will assign a tyProperties modifiers to each object with a custom float value corresponding to their material location in the multisub"
+	Checkbox typrop_chk "Assign tyProperties" checked:on pos:[47,55] tooltip:"Will assign a tyProperties modifier to each object with a custom float value corresponding to their material location in the multisub"
 	radioButtons rdR "Stack modifier position" labels:#("top", "bot") default:1 columns:2 align:#left tooltip:"" pos:[50,80] offsets:#([0,2.5], [5,2.5]) 
 	button apply_btn "APPLY Multisub" enabled:false width:110  pos:[47,125] 
 	button del_btn "Delete tyProperties" pos:[47,170] width:110 tooltip:"Delete all tyProperties modifiers on selected objects"

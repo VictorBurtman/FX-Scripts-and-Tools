@@ -1,3 +1,11 @@
+/*==========================
+||  Materials to VRay Material Switcher
+||  Combine the materials of each selected object into a VRay Material Switcher.
+||	Can assign a tyProperties modifier to each object with a custom float value corresponding to their material location in the multisub.
+||  Author: Victor Burtman 
+||  www.victorburtman.com 
+==========================*/
+
 title = "Materials to Mtl Switcher"	
 try (destroydialog tyPropertiesRollout)catch()
 IsTFInstalled = true
@@ -41,7 +49,7 @@ rollout tyPropertiesRollout title height:230 width:200
 					(
 						if current_object.material != undefined then 
 						(
-							appendIfUnique material_list current_object.material  -- on ajoute le material à la liste si il n'y est pas deja 
+							appendIfUnique material_list current_object.material  -- on ajoute le material ï¿½ la liste si il n'y est pas deja 
 							valInArr = findItem material_list current_object.material --on recupere sa position dans l'array pour la donner au typrop
 						)
 						else 

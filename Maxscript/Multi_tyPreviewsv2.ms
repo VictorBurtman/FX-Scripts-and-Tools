@@ -1,3 +1,11 @@
+/*==========================
+||  tyPreviews Batch Multi Files
+||  Load / Open files and create previews using the tyPreview tool.
+||	tyFlow plugin is required
+||  Author: Victor Burtman 
+||  www.victorburtman.com 
+==========================*/
+
 try (destroydialog test)catch()
 rollout test "Multi-Files tyPreviews" width:520 height:510
 (
@@ -183,7 +191,7 @@ rollout test "Multi-Files tyPreviews" width:520 height:510
 		
 		--tyCache
 		tempoArraytyMesh = #()
-		for i in theFileNames where (getfilenametype i) == ".tyc" and not matchpattern (getfilenamefile i) pattern:(@"*" + "tyMesh" + @"*") do append tempoArraytyMesh i -- tous les .tyc qui n'ont pas tymesh dans leur nom sont ajoutés dans une collection
+		for i in theFileNames where (getfilenametype i) == ".tyc" and not matchpattern (getfilenamefile i) pattern:(@"*" + "tyMesh" + @"*") do append tempoArraytyMesh i -- tous les .tyc qui n'ont pas tymesh dans leur nom sont ajoutï¿½s dans une collection
 		if tempoArraytyMesh.count > 0 do 
 		(
 			SequenceTyCacheNames = #()
@@ -217,9 +225,9 @@ rollout test "Multi-Files tyPreviews" width:520 height:510
 				append SequencesFiles f
 			)
 			nonXMeshTempArr = #()
-			for t in theFileNames where (getfilenametype t) != ".xmesh" do append nonXMeshTempArr t -- tous les non XMESH sont ajoutés dans l'array
+			for t in theFileNames where (getfilenametype t) != ".xmesh" do append nonXMeshTempArr t -- tous les non XMESH sont ajoutï¿½s dans l'array
 					
-			for sf in SequencesFiles do append nonXMeshTempArr sf -- les xmesh retenus sont aussi ajoutés dans l'array
+			for sf in SequencesFiles do append nonXMeshTempArr sf -- les xmesh retenus sont aussi ajoutï¿½s dans l'array
 
 			theFileNames = nonXMeshTempArr	-- l'array principale est reconstruite ici
 		)				
@@ -302,7 +310,7 @@ rollout test "Multi-Files tyPreviews" width:520 height:510
 			
 				--tyCache
 				tempoArraytyMesh = #()
-				for i in theFiles where (getfilenametype i) == ".tyc" and not matchpattern (getfilenamefile i) pattern:(@"*" + "tyMesh" + @"*") do append tempoArraytyMesh i -- tous les .tyc qui n'ont pas tymesh dans leur nom sont ajoutés dans une collection
+				for i in theFiles where (getfilenametype i) == ".tyc" and not matchpattern (getfilenamefile i) pattern:(@"*" + "tyMesh" + @"*") do append tempoArraytyMesh i -- tous les .tyc qui n'ont pas tymesh dans leur nom sont ajoutï¿½s dans une collection
 				if tempoArraytyMesh.count > 0 do 
 				(
 					SequenceTyCacheNames = #()
@@ -511,7 +519,7 @@ rollout test "Multi-Files tyPreviews" width:520 height:510
 					callbacks.removeScripts id:#checkTimeCreation
 					if (loadMaxFile i useFileUnits:true quiet:true) == true then
 					(	
-						-- on desactive le print des tyflows presents dans la scène
+						-- on desactive le print des tyflows presents dans la scï¿½ne
 						tyFlowArray = #()
 						try(tyFlowArray = for tfs in (getClassInstances tyFlow) collect tfs) catch()
 						for tf in tyFlowArray do tf.printSummary = off
@@ -581,16 +589,16 @@ rollout test "Multi-Files tyPreviews" width:520 height:510
 							ArrNumberSequence = #()
 							patternSequence = trimRight (getFilenameFile i) "-0123456789," -- recupere le nom brut du fichier
 							AllFilesXMesh = getFiles ((getfilenamepath i) + "\\*.xmesh") -- recupere tous les fichiers xmesh dans le dossier
-							for A in AllFilesXMesh do -- et on garde que ceux qui ont le même nom brut (donc ceux de la meme sequence)
+							for A in AllFilesXMesh do -- et on garde que ceux qui ont le mï¿½me nom brut (donc ceux de la meme sequence)
 							(
 								patternA = trimRight (getFilenameFile A) "0123456789,"
 								if patternA == patternSequence do append SequenceXMESH A 
 							)
 							
-							for XM in SequenceXMESH do -- On recupere les numéros de chaque fichier
+							for XM in SequenceXMESH do -- On recupere les numï¿½ros de chaque fichier
 							(
 								rx = dotNetClass "System.Text.RegularExpressions.RegEx"
-								if (rx.ismatch (getfilenamefile XM) "-[0-9]{4}") == true then -- si un nombre negatif est trouvé
+								if (rx.ismatch (getfilenamefile XM) "-[0-9]{4}") == true then -- si un nombre negatif est trouvï¿½
 								(
 									matches	= rx.match (getfilenamefile XM) "-[0-9]{4}" -- on ajoute ce nombre
 									valueN = matches.value
@@ -643,16 +651,16 @@ rollout test "Multi-Files tyPreviews" width:520 height:510
 							ArrNumberSequence2 = #()
 							patternSequence = trimRight (getFilenameFile i) "-0123456789," -- recupere le nom brut du fichier
 							AllFilesTYCACHE = getFiles ((getfilenamepath i) + "\\*.tyc") -- recupere tous les fichiers tycache dans le dossier
-							for A in AllFilesTYCACHE where not matchpattern (getfilenamefile i) pattern:(@"*" + "tyMesh" + @"*") do -- et on garde que ceux qui ont le même nom brut (donc ceux de la meme sequence)
+							for A in AllFilesTYCACHE where not matchpattern (getfilenamefile i) pattern:(@"*" + "tyMesh" + @"*") do -- et on garde que ceux qui ont le mï¿½me nom brut (donc ceux de la meme sequence)
 							(
 								patternA = trimRight (getFilenameFile A) "-0123456789,"
 								if patternA == patternSequence do append SequenceTYCACHE A 
 							)
 							
-							for TC in SequenceTYCACHE do -- On recupere les numéros de chaque fichier
+							for TC in SequenceTYCACHE do -- On recupere les numï¿½ros de chaque fichier
 							(
 								rx = dotNetClass "System.Text.RegularExpressions.RegEx"
-								if (rx.ismatch (getfilenamefile TC) "-[0-9]{5}") == true then -- si un nombre negatif est trouvé
+								if (rx.ismatch (getfilenamefile TC) "-[0-9]{5}") == true then -- si un nombre negatif est trouvï¿½
 								(
 									matches	= rx.match (getfilenamefile TC) "-[0-9]{5}" -- on ajoute ce nombre
 									valueN = matches.value

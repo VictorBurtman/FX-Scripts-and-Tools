@@ -1,3 +1,11 @@
+/*==========================
+||  tyProperties Object ID
+||  Assign a tyProperties modifier to each selected objects with a custom float corresponding to their Object ID. 
+||	tyFlow plugin is required
+||  Author: Victor Burtman 
+||  www.victorburtman.com 
+==========================*/
+
 try (destroydialog tyPropertiesRollout)catch()
 IsTFInstalled = true
 try (tyPropMod = tyProperties()) catch (IsTFInstalled = false) -- we test if tyflow is installed

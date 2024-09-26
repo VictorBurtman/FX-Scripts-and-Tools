@@ -1,7 +1,15 @@
--- Ce script permet de créer un multimaterial dont chaque sub contient une texture (celle qu'on a choisi préalablement). Si la texture est animée (coordonnées, couleurs, taille etc.), chaque sub correspondra à un état de l'animation. 
+/*==========================
+||  Texmap to Multisub
+||  Create a multisub whose each sub id contains the state of an animated texture. 
+||  Author: Victor Burtman 
+||  www.victorburtman.com 
+==========================*/
+
+
 clearlistener()
+titleMessagebox = "Texmap to ID"
 Try(DestroyDialog Collapse_Map_Subv2) Catch()
-rollout Collapse_Map_Subv2 "Texmap to ID" width:188 height:430		
+rollout Collapse_Map_Subv2 titleMessagebox width:188 height:430		
 (
 	local First_Frame = (animationRange.start as integer)/TicksPerFrame
 	local Last_Frame = (animationRange.end as integer)/TicksPerFrame
@@ -13,7 +21,7 @@ rollout Collapse_Map_Subv2 "Texmap to ID" width:188 height:430
 	local Etat_ShowViewport = on
 	local Amount_selfillu = 100
 	local ColorA = color 85 85 85
-	local titleMessagebox = "Texmap to ID"
+	local 
 	groupbox grp_General "General Settings" height:225 width:178 pos:[5,8]
 	groupbox grp_Standard "Material Settings" height:88 width:208 pos:[5,238]
 	
@@ -389,7 +397,7 @@ rollout Collapse_Map_Subv2 "Texmap to ID" width:188 height:430
 					Try(	second_optional_map.solidcolor = custommap.solidcolor) Catch()
 				)
 				-----------------------------
-				if drp_channelfirst.selection == 3 then -- seulement la first map est appliquée
+				if drp_channelfirst.selection == 3 then -- seulement la first map est appliquï¿½e
 				(
 					standard_mat.diffusemap = noise_map
 					if chkFirstMapAsInstance.checked == on then (standard_mat.opacityMap = noise_map) else standard_mat.opacityMap = copy noise_map

@@ -1,3 +1,10 @@
+/*==========================
+||  Pflow Randomise Selected Operators
+||  Randomise the seed of the selected pflow operators
+||  Author: Victor Burtman 
+||  www.victorburtman.com 
+==========================*/
+
 pView = particleFlow.OpenParticleView()
 array_sel = #()
 for sel_obj in pView.selected do append array_sel sel_obj

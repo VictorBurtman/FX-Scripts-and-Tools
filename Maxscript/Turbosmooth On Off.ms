@@ -1,5 +1,13 @@
+/*==========================
+||  Turbosmooth Controller
+||  Add, Remove or Control turbosmooths on selected objects.
+||  Author: Victor Burtman 
+||  www.victorburtman.com 
+==========================*/
+
+titleMessagebox = "Turbosmooth"
 Try(DestroyDialog TurnMod) Catch()
-rollout TurnMod "Turbosmooth" width:150 height:390
+rollout TurnMod titleMessagebox width:150 height:390
 (
 	local Etat = 2
 	local Etat_UseRender = false
@@ -31,7 +39,7 @@ rollout TurnMod "Turbosmooth" width:150 height:390
 	button btn_delTurbosmooth "Delete Turbosmooths" tooltip:"Delete Turbosmooths on selected obj" width:120
 	button btn_HelpTurbo "Help" tooltip:"How does this script works ?"
 	
- -- fonctions pour l'affichage du nombre d'objets selectionnés
+ -- fonctions pour l'affichage du nombre d'objets selectionnï¿½s
 	
 	fn printSelNumber =
 	(
@@ -79,7 +87,7 @@ rollout TurnMod "Turbosmooth" width:150 height:390
 		if Etat == 1 do Etat_OnlyViewport = false
 	)
 
-	on btnOk pressed do -- Premier boutton OK (définit les iterations du turbosmooth)
+	on btnOk pressed do -- Premier boutton OK (dï¿½finit les iterations du turbosmooth)
 	(
 		Nombre = 0
 		iter = 0
@@ -108,7 +116,7 @@ rollout TurnMod "Turbosmooth" width:150 height:390
 		)
 	)
 
-	on btnOk2 pressed do -- Deuxième bouton OK (gère l'activation du turbosmooth)
+	on btnOk2 pressed do -- Deuxiï¿½me bouton OK (gï¿½re l'activation du turbosmooth)
 	(
 		Nombre = 0
 		iter = 0
@@ -119,9 +127,9 @@ rollout TurnMod "Turbosmooth" width:150 height:390
 		(
 			for o in $ where superclassof o == GeometryClass do for m in o.modifiers where classOf m == turboSmooth do Nombre +=1 -- on compte le nombre de turbosmooth
 				
-			if Etat_OnlyViewport == false then -- si "affect viewport only" est décoché
+			if Etat_OnlyViewport == false then -- si "affect viewport only" est dï¿½cochï¿½
 			(
-				if Etat == 1 then -- si turn on est coché
+				if Etat == 1 then -- si turn on est cochï¿½
 				(		
 					for o in $ where superclassof o == GeometryClass do  
 					(
@@ -141,7 +149,7 @@ rollout TurnMod "Turbosmooth" width:150 height:390
 					)
 				)
 				
-				if Etat == 2 then -- si turn off est coché
+				if Etat == 2 then -- si turn off est cochï¿½
 				(
 					for o in $ where superclassof o == GeometryClass do
 					(
@@ -160,7 +168,7 @@ rollout TurnMod "Turbosmooth" width:150 height:390
 					)
 				)
 			)
-			else -- si "affect viewport only" est coché (ne peut fonctionner qu'avec le turn off)
+			else -- si "affect viewport only" est cochï¿½ (ne peut fonctionner qu'avec le turn off)
 			(
 				for o in $ where superclassof o == GeometryClass do  
 				(
@@ -168,7 +176,7 @@ rollout TurnMod "Turbosmooth" width:150 height:390
 					(
 						m.enabled = true -- on reactive tout 
 						m.enabledInViews = true
-						m.enabledInViews = false -- puis on désactive dans le viewport
+						m.enabledInViews = false -- puis on dï¿½sactive dans le viewport
 						
 						----------------------------------------	progress bar -------------------
 						iter += 1
@@ -195,7 +203,7 @@ rollout TurnMod "Turbosmooth" width:150 height:390
 					if ((classOf theNode.modifiers[index]) == turbosmooth) do (deleteModifier theNode index; numberdel +=1)
 				)
 			)
-			messagebox (numberdel as string + " turbosmooths has been deleted") title:"Turbosmooth Controler"
+			messagebox (numberdel as string + " turbosmooths has been deleted") title:titleMessagebox
 			gc()
 		)
 	)
@@ -218,13 +226,13 @@ rollout TurnMod "Turbosmooth" width:150 height:390
 		(
 			ModTurbo.enabled = true -- on reactive tout 
 			ModTurbo.enabledInViews = true
-			ModTurbo.enabledInViews = false -- puis on désactive dans le viewport
+			ModTurbo.enabledInViews = false -- puis on dï¿½sactive dans le viewport
 		)
 		
 		for i in selection do	addmodifier i ModTurbo
 	)
 	
-	on btn_HelpTurbo pressed do messagebox ("With this script you can :\n\n-- Modify the Turbosmooth(s) on your selected objects (edit the iterations and the activation parameters)\n\n-- Delete all the Turbomooths on your selected objects\n\n-- Add an instancied Turbosmooth on all your selected objects, according to the parameters specified in the script")title:"Turbosmooth Controler"
+	on btn_HelpTurbo pressed do messagebox ("With this script you can :\n\n-- Modify the Turbosmooth(s) on your selected objects (edit the iterations and the activation parameters)\n\n-- Delete all the Turbomooths on your selected objects\n\n-- Add an instancied Turbosmooth on all your selected objects, according to the parameters specified in the script")title:titleMessagebox
 )
 
 createdialog TurnMod

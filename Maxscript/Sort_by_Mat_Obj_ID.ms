@@ -1,7 +1,13 @@
+/*==========================
+||  Sort by Material or Object ID
+||  Sort the selected objects into different layers according to their material ID or Object ID
+||  Author: Victor Burtman 
+||  www.victorburtman.com 
+==========================*/
+titleMessagebox = "Sort by Obj/Mat ID"
 try(destroydialog separateByMatID)catch()
-rollout separateByMatID "Sort by Obj/Mat ID" width:200
+rollout separateByMatID titleMessagebox width:200
 (
-	local titleMessagebox = "Sort by Obj/Mat ID"
 	local layerName = "Sorted_By_Obj_ID"
 	local ObjNames = "Object_Name_"
 	local searchObjType = Editable_Poly

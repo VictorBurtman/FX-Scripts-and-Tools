@@ -1,3 +1,11 @@
+/*==========================
+||  tyCaches Controller
+||  Control the display, render and timing parameters of the tyCaches in your scene. 
+||	tyFlow plugin is required
+||  Author: Victor Burtman 
+||  www.victorburtman.com 
+==========================*/
+
 clearListener()
 gc()
 title = "Export tyFlows"
