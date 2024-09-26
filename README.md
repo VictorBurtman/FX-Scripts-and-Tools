@@ -1,2 +1,36 @@
-# FX Scripts
- Maxscript - Python - C#
+# Welcome to My Repository!
+
+After many years in the Visual FX industry, I’ve decided to share some of the tools I’ve developed. Feel free to use, customize, improve, and share them as you see fit!
+
+## What's Inside
+
+- **MaxScript**: MaxScript is the native scripting language for 3ds Max. You can drag and drop the `.ms` files into 3ds Max to run them, or create a custom macro for quick access.
+  
+- **Max Files**: Some setups not only involve scripting but require a full scene, including rigs, tyFlow setups, objects, etc.
+
+- **tyFlow Scripts**: These are written in C# and need to be loaded into a script operator in the tyFlow editor.
+
+- **Houdini HDAs**: Ready-to-use assets you can easily import into your Houdini projects.
+
+- **Houdini Python Scripts**: These Python scripts can be added to your Houdini shelf to automate common tasks.
+
+## Quick Tips
+
+### Creating a Macro Script in 3ds Max
+
+To quickly access an external script in 3ds Max, use the following code:
+
+```maxscript
+scriptPath = @"C:\yourFolder\yourScript.ms"
+if doesfileexist scriptPath do filein scriptPath
+```
+
+## More of My Work
+
+Explore more of my work on my [website](https://www.victorburtman.com/).
+
+## Contact
+
+For suggestions or bug reports, feel free to reach out at **victorburtman@gmail.com**.
+
+Enjoy!
