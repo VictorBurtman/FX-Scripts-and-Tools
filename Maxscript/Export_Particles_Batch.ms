@@ -1,3 +1,11 @@
+/*==========================
+||  tyFlow Batching Export 
+||  Add Export Particles operators in multiples tyFlows and batch their exports
+||	tyFlow plugin is required 
+||  Author: Victor Burtman 
+||  www.victorburtman.com 
+==========================*/
+
 clearListener()
 gc()
 title = "Export tyFlows"
