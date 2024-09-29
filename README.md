@@ -26,7 +26,7 @@ if doesfileexist scriptPath do filein scriptPath
 ```
 ### Creating a Macro Script in 3ds Max
 
-Find more maxscript tips for improving your FX worflow [here](https://www.youtube.com/watch?v=VMQv5TyddVA&). 
+Improve your worflow using [maxscript](https://www.youtube.com/watch?v=VMQv5TyddVA&). 
 
 
 ## More of My Work
