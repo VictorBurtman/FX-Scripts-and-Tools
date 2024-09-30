@@ -27,7 +27,9 @@ if doesfileexist scriptPath do filein scriptPath
 ### Using Maxscript with tyFlow
 
 Improve your worflow using [maxscript](https://www.youtube.com/watch?v=VMQv5TyddVA&). 
+
 [How to batch export](https://www.youtube.com/watch?v=T489-QfWMMg).
+
 [How to use the tyCache control script](https://www.youtube.com/watch?v=Q3q3P92XOYg&list=PL4Fltnv41D9PCAp6L5GAXB9XbF0XZ-NGI&index=12).
 
 ## More of My Work
