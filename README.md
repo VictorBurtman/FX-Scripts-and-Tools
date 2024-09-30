@@ -41,3 +41,7 @@ Explore more of my work on my [website](https://www.victorburtman.com/).
 For suggestions or bug reports, feel free to reach out at **victorburtman@gmail.com**.
 
 Enjoy!
+
+
+### Usage License
+The scripts in this repository are free to use and royalty-free. You are allowed to use them in commercial productions, provided that I am credited as the author. However, resale of these scripts is strictly prohibited.
