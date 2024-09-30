@@ -1,6 +1,6 @@
 # Welcome to My Repository!
 
-After many years in the Visual FX industry, I’ve decided to share some of the tools I’ve developed. Feel free to use, customize, improve, and share them as you see fit!
+After many years in the Visual FX industry, I’ve decided to share some of the tools I’ve developed. There are free to use and royalty-free. You are allowed to use them in commercial productions, provided that I am credited as the author. However, resale of these content is strictly prohibited.
 
 ## What's Inside
 
@@ -32,16 +32,12 @@ Improve your worflow using [maxscript](https://www.youtube.com/watch?v=VMQv5Tydd
 
 [How to use the tyCache control script](https://www.youtube.com/watch?v=Q3q3P92XOYg&list=PL4Fltnv41D9PCAp6L5GAXB9XbF0XZ-NGI&index=12).
 
-## More of My Work
-
-Explore more of my work on my [website](https://www.victorburtman.com/).
 
 ## Contact
 
 For suggestions or bug reports, feel free to reach out at **victorburtman@gmail.com**.
 
+Explore more of my work on my [website](https://www.victorburtman.com/).
+
 Enjoy!
 
-
-### Usage License
-The scripts in this repository are free to use and royalty-free. You are allowed to use them in commercial productions, provided that I am credited as the author. However, resale of these scripts is strictly prohibited.
