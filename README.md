@@ -1,6 +1,7 @@
 # Welcome to My Repository!
 
-After many years in the Visual FX industry, I’ve decided to share some of the tools I’ve developed. There are free to use and royalty-free. You are allowed to use them in commercial productions, provided that I am credited as the author. However, resale of these content is strictly prohibited.
+After many years in the Visual FX industry, I’ve decided to share some of the tools I’ve developed. There are free to use and royalty-free. 
+You are allowed to use them in commercial productions, provided that I am credited as the author. However, resale of these content is strictly prohibited.
 
 ## What's Inside
 
