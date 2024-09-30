@@ -24,7 +24,7 @@ To quickly access an external script in 3ds Max, use the following code:
 scriptPath = @"C:\yourFolder\yourScript.ms"
 if doesfileexist scriptPath do filein scriptPath
 ```
-### Using Maxscript with tyFlow
+### Maxscript & tyFlow
 
 Improve your worflow using [maxscript](https://www.youtube.com/watch?v=VMQv5TyddVA&). 
 
