@@ -69,7 +69,8 @@ rollout tyCachesInScene "tyCaches List"
 rollout displayParameters "Display" 
 (
 	groupbox grp_1 "Display as" pos:[10,10] height:370 width:200 
-	radiobuttons displayTypeRdb pos:[20,40] labels:#("Meshes", "Bounding Box") columns:2 default:1 offsets:#([0,0],[-11,0]) tooltip:"" 
+	checkbox displayChk "Display in viewport" pos:[20,30] checked:true
+	radiobuttons displayTypeRdb pos:[20,50] labels:#("Meshes", "B Box", "Convex") columns:3 default:1 offsets:#([0,0],[0,0],[-5,0]) tooltip:"" 
 	checkbox simplifyMeshesChk "Simplify meshes" pos:[20,75] checked:off tooltip:""
 	spinner MaxFacesSpn "Max faces:" range:[1,10000000000,10000] pos:[35,100] type:#integer fieldWidth:40 enabled:off
 	spinner DisplayPercentSpn "Particles Display %: " range:[0,100,100] pos:[20,130] type:#float fieldWidth:40 enabled:on
@@ -91,8 +92,9 @@ rollout displayParameters "Display"
 	
 	local newSeqPath = undefined
 	
+	on displayChk changed arg do displayTypeRdb.enabled = arg
 	on simplifyMeshesChk changed arg do MaxFacesSpn.enabled = arg
-
+	
 	on useGpuChk changed arg do ignoreUvwChk.enabled = arg
 	
 	on newSeqBtn pressed do 
@@ -101,6 +103,8 @@ rollout displayParameters "Display"
 		if newSeqPath != undefined then (newSeqBtn.text = newSeqPath ; newSeqBtn.tooltip = newSeqPath)
 		else (newSeqBtn.text = "Sequence..." ; newSeqBtn.tooltip = "You can choose a new tyCache sequence" ; newSeqPath = undefined)
 	)
+	
+	
 	
 	on applyDisplayBtn pressed do 
 	(
@@ -113,7 +117,8 @@ rollout displayParameters "Display"
 		(
 			for i in Array_tyCache do 
 			(
-				i.displayMode = displayTypeRdb.state - 1
+				i.displayInViewport = displayChk.state
+				if displayChk.state == true do i.displayMode = displayTypeRdb.state - 1
 				i.displaySimplifyMeshes = simplifyMeshesChk.state
 				i.displaySimplifyMeshesMaxFaces = MaxFacesSpn.value
 				i.displayPercent = DisplayPercentSpn.value
