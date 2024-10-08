@@ -1,6 +1,14 @@
 # Welcome to My Repository!
 
-After many years in the Visual FX industry, I’ve decided to share some of the tools I’ve developed. Feel free to use, customize, improve, and share them as you see fit!
+After many years in the Visual FX industry, I’ve decided to share some of the tools I’ve developed.  
+
+## Usage License
+
+There are free to use and royalty-free.
+
+You are allowed to use them in commercial productions, provided that I am credited as the author.
+
+However, resale of these content is strictly __prohibited__.
 
 ## What's Inside
 
@@ -24,13 +32,20 @@ To quickly access an external script in 3ds Max, use the following code:
 scriptPath = @"C:\yourFolder\yourScript.ms"
 if doesfileexist scriptPath do filein scriptPath
 ```
+### Maxscript & tyFlow
 
-## More of My Work
+Improve your worflow using [maxscript](https://www.youtube.com/watch?v=VMQv5TyddVA&). 
 
-Explore more of my work on my [website](https://www.victorburtman.com/).
+[How to batch export](https://www.youtube.com/watch?v=T489-QfWMMg).
+
+[How to use the tyCache control script](https://www.youtube.com/watch?v=Q3q3P92XOYg&list=PL4Fltnv41D9PCAp6L5GAXB9XbF0XZ-NGI&index=12).
+
 
 ## Contact
 
 For suggestions or bug reports, feel free to reach out at **victorburtman@gmail.com**.
 
+Explore more of my work on my [website](https://www.victorburtman.com/).
+
 Enjoy!
+
