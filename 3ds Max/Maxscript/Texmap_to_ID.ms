@@ -454,8 +454,6 @@ rollout Collapse_Map_Subv2 titleMessagebox width:188 height:430
 			select sphere_temoin
 			wait_label.text = "Ok"
 			gc()
-		
-		
 	)	
 	on help_btn pressed do messagebox ("The purpose of this script is to catch a texture animation at each frame in an individual submaterial. You can animate the textures map's coordinates parameters and most of the usuals parameters such as size, colors, phase, etc.\n\nThis script works with any texture map. It will create a multi-material whose number of sub corresponds to the frame range you have chosen. Every sub is a standard material with the specified maps pluged into his diffuse and/or opacity channels. You can load two maps : the first one will be pluged into the selected channel(s) (diffuse and/or opacity). Second map is optionnal and can be pluged as well in the diffuse or opacity channel.\n\nUnfortunately you can't drag and drop the textures directly from the material editor, so you'll have to clic on the map buttons to load the texmaps.\n\nAfter Proceeding, the script create a sphere and apply the multimaterial on it, that's how you get it. It also apply an animated material modifier.\n\nFeel free to use and modify the script.\n\nContact : victorburtman@gmail.com")title:titleMessagebox 
 )

@@ -8,87 +8,119 @@
 
 gc()
 title = "tyCache Control"
-try(DestroyDialog tcControl) catch()
 
-Global selOnly = true 
-rollout tcControl title height:550 width:260
+try(DestroyDialog tcControl) catch()
+tcs = #() -- tyCaches in the scene
+selectedTcs = #() -- tyCaches selected in the list
+
+error_noTc = "Nothing is selected"
+
+rollout tcControl title height:720 width:260
 (
-	checkbox selOnlyChk "SELECTED ONLY" checked:on tooltip:"Checked : apply modifications to the selected tyCaches.\n\nUnchecked : apply modifications to all tyCaches in the scene."
+	multiListBox mlb " "
 	button helpBtn "Help" pos:[200,05] height:15
+	
+	button refreshBtn "Refresh" pos:[20,165]
+	button selectAll "Sel. All" pos:[80,165] tooltip:"Select all items in the list"
+	button selectBtn "Sel. in Scene" pos:[130,165] tooltip:"Select in scene the selected items in the list"
 	subrollout displayParam "Display" 
 	on selOnlyChk changed arg do (selOnly = arg)
+	
+	--this function collect all tyCaches in the scene and display their name in the listbox
+	fn refreshList listbox bool =
+	(
+		tcs = #()
+		if bool == true do (messageBox("tyCache(s) might have been deleted. Automatic refresh of the list.")title:title)
+		tcs = for tc in objects where classof tc.baseObject == tyCache collect tc
+		listbox.items = for tc in tcs collect tc.name
+		listbox.text = "tyCaches in scene : " + tcs.count as string
+	)
+	
+	on tcControl open do refreshList mlb false-- Collect all tyCaches in the list when we open the script
+		
+	--reload the list
+	on refreshBtn pressed do 
+	(
+		refreshList mlb false
+		mlb.selection = #()
+		selectedTcs = #()
+	)
+	
+	-- Select all items in list	
+	on selectAll pressed do
+	(
+		selectedTcs = #()
+		mlb.selection = for i = 1 to mlb.items.count collect i
+		selectedTcs = tcs
+	) 
+	
+	--When selected in list
+	on mlb selectionEnd do 
+	(
+		refreshList mlb false
+		selectedTcs = #()
+		for i in mlb.selection do
+		(
+			for o = 1 to tcs.count do
+			(
+				if o == i do append selectedTcs tcs[o]
+			)
+		)
+	)
+	
+	--Clear Selection in List
+	on mlb rightClick do 
+	(
+		mlb.selection = #()
+		selectedTcs = #()
+	)
+	
+	--Select specified object in viewport
+	on mlb doubleClicked arg do 
+	(
+		try(select selectedTcs) 
+		catch (refreshList mlb true)
+	)
+	
+	--Select list selection in viewport
+	on selectBtn pressed do 
+	(
+		try(select selectedTcs) 
+		catch (refreshList mlb true)
+	)
+	
 	on helpBtn pressed do messageBox("This script will allow you to control your tyCache objects.\n\nYou can modify the display, render and timing parameters separately.\n\nMost of the settings are the same as for tyCache, so you can refer to the documentation available on the tyFlow website.\n\nFor the additional parameters there are tooltips to help you, do not hesitate to use it.\n\nCreated by Victor Burtman. If you want to submit a bug or a suggestion, please send an email to victorburtman@gmail.com")title:title
 )
 
-rollout tyCachesInScene "tyCaches List"
-(
-	multiListBox mlb "tyCaches in scene"
-	button refreshBtn "Refresh" pos:[20,165]
-	
-	button selectAll "Sel. All" pos:[80,165] tooltip:"Select all items in the list"
-	button selectBtn "Sel. in Scene" pos:[130,165] tooltip:"Select in scene the selected items in the list"
-	local tyCachesList = #()
-	fn refreshList listbox bool =
-	(
-		if bool == true do (messageBox("tyCache(s) might have been deleted. Automatic refresh of the list.")title:title)
-		
-		tyCachesList = for tc in objects where classof tc.baseObject == tyCache collect tc
-		listbox.items = for tc in tyCachesList collect tc.name
-		listbox.text = "tyCaches in scene : " + tyCachesList.count as string
-	)
-	
-	on tyCachesInScene open do refreshList mlb false-- Collect all tyCaches in the list when we open the script
-	
-	on refreshBtn pressed do refreshList mlb false -- Collect all tyCaches in the list when we refresh the list
-	
-	on mlb rightClick do mlb.selection = #() -- Clear selection when right click
-	
-	on mlb doubleClicked arg do -- Select item in scene when double clicked
-	(
-		try(select tyCachesList[arg]) 
-		catch (refreshList mlb true)
-	)
-	
-	on selectAll pressed do (mlb.selection = for i = 1 to mlb.items.count collect i) -- Select all items in list
-	
-	on selectBtn pressed do -- Select in scene the selected items in list
-	(
-		toSelect = #()
-		for i in mlb.selection do
-		(
-			for o = 1 to tyCachesList.count do
-			(
-				if o == i do append toSelect tyCachesList[o]
-			)
-		)
-		try(select toSelect) 
-		catch (refreshList mlb true)
-	)
-) 
-
 rollout displayParameters "Display" 
 (
-	groupbox grp_1 "Display as" pos:[10,10] height:370 width:200 
-	checkbox displayChk "Display in viewport" pos:[20,30] checked:true
-	radiobuttons displayTypeRdb pos:[20,50] labels:#("Meshes", "B Box", "Convex") columns:3 default:1 offsets:#([0,0],[0,0],[-5,0]) tooltip:"" 
-	checkbox simplifyMeshesChk "Simplify meshes" pos:[20,75] checked:off tooltip:""
-	spinner MaxFacesSpn "Max faces:" range:[1,10000000000,10000] pos:[35,100] type:#integer fieldWidth:40 enabled:off
-	spinner DisplayPercentSpn "Particles Display %: " range:[0,100,100] pos:[20,130] type:#float fieldWidth:40 enabled:on
-	checkbox ptcAsDotsChk "Particles as dots"pos:[20,155] checked:off 
+	checkbox displayChk "Display in viewport" pos:[20,10] checked:true
+	radiobuttons displayTypeRdb pos:[25,35] labels:#("Meshes", "B Box", "Convex") columns:3 default:1 offsets:#([0,0],[0,0],[-5,0]) tooltip:"" 
 	
-	groupbox grp_2 "tyCache Elements (to render)" pos:[20,180] height:50 width:180 
-	checkbox loadPtcChk "Particles" checked:on pos:[30,205]
-	checkbox loadMeshesChk "Meshes" checked:on pos:[110,205]
-	checkbox useGpuChk "Use GPU Instancing" pos:[20,240] checked:on tooltip:""
-	checkbox ignoreUvwChk "Ignore UVW Over." pos:[20,260] checked:on tooltip:""
-	label coordLbl "Coordinates: " pos:[20,295]
-	radiobuttons coordRdb pos:[90,295] labels:#("Local", "World") columns:3 default:1 
-	checkbox keepFrameChk "Keep frames in RAM" pos:[20,325] checked:on 
-	checkbox showIconChk "Show icon(s)" pos:[20,355] checked:on tooltip:""
+	groupbox grp_3 "Acceleration" pos:[15,65] height:60 width:190 
+	checkbox useGpuChk "Use GPU Instancing" pos:[20,85] checked:on tooltip:""
+	checkbox ignoreUvwChk "Ignore UVW Over." pos:[25,105] checked:on tooltip:""
+		
+	groupbox grp_4 "Optimization" pos:[15,135] height:60 width:190 
+	checkbox simplifyMeshesChk "Simplify meshes" pos:[20,155] checked:off tooltip:""
+	spinner MaxFacesSpn "Max faces:" range:[1,10000000000,10000] pos:[35,175] type:#integer fieldWidth:40 enabled:off
 	
-	button newSeqBtn "Sequence..." pos:[60,390] width:100 height:20 tooltip:"You can choose a new tyCache sequence"
+	spinner DisplayPercentSpn "Particles Display %: " range:[0,100,100] pos:[20,205] type:#float fieldWidth:40 enabled:on
+	checkbox ptcAsDotsChk "Particles as dots"pos:[20,230] checked:off 
 	
-	button applyDisplayBtn "Apply" pos:[60,420] width:100 height:40
+	groupbox grp_2 "Elements (to load)" pos:[15,260] height:40 width:190 
+	checkbox loadPtcChk "Particles" checked:on pos:[30,280]
+	checkbox loadMeshesChk "Deform Meshes" checked:on pos:[95,280]
+	
+	label coordLbl "Coordinates: " pos:[20,320]
+	radiobuttons coordRdb pos:[90,320] labels:#("Local", "World") columns:3 default:2 
+	
+	checkbox keepFrameChk "Keep in RAM" pos:[105,350] checked:on 
+	checkbox showIconChk "Show icon(s)" pos:[20,350] checked:on tooltip:""
+	
+	button newSeqBtn "Sequence..." pos:[60,385] width:100 height:20 tooltip:"You can choose a new tyCache sequence"
+	
+	button applyDisplayBtn "Apply"  width:200 height:50 pos:[12,420] 
 	
 	local newSeqPath = undefined
 	
@@ -104,18 +136,11 @@ rollout displayParameters "Display"
 		else (newSeqBtn.text = "Sequence..." ; newSeqBtn.tooltip = "You can choose a new tyCache sequence" ; newSeqPath = undefined)
 	)
 	
-	
-	
 	on applyDisplayBtn pressed do 
 	(
-		---- Get the tyCaches (either selected or every tyCaches in the scene)
-		Array_tyCache = #()
-		if selOnly == false then for tc in (getClassInstances tyCache) do append Array_tyCache tc else for tc in selection where classof tc.baseobject == tyCache do append Array_tyCache tc
-		---------------------------
-		
-		if Array_tyCache.count > 0 then
+		if selectedTcs.count > 0 then
 		(
-			for i in Array_tyCache do 
+			for i in selectedTcs do -- for each selected tyCache
 			(
 				i.displayInViewport = displayChk.state
 				if displayChk.state == true do i.displayMode = displayTypeRdb.state - 1
@@ -123,7 +148,7 @@ rollout displayParameters "Display"
 				i.displaySimplifyMeshesMaxFaces = MaxFacesSpn.value
 				i.displayPercent = DisplayPercentSpn.value
 				i.displayAsDots = ptcAsDotsChk.state
-				i.elementsParticles = loadPtcChk.state
+			--	i.elementsParticles = true --loadPtcChk.state
 				i.elementsMeshes = loadMeshesChk.state
 				i.gpuInstancing = useGpuChk.state
 				i.ignoreMapping = ignoreUvwChk.state
@@ -132,44 +157,38 @@ rollout displayParameters "Display"
 				i.showIcon = showIconChk.state
 				if newSeqPath != undefined do i.filename = newSeqPath
 			)
-			displayTempPrompt ("Display modifications applied on " + (Array_tyCache.count as string) + " tyCache(s) !") 10000
-			--messagebox ("Display modifications applied on " + (Array_tyCache.count as string) + " tyCache(s) !")title:title 
+			displayTempPrompt ("Display modifications applied on " + (selectedTcs.count as string) + " tyCache(s) !") 10000
 		)
-		else messagebox ("No tyCache to apply modification on")title:title 
+		else messagebox error_noTc title:title 
 	)
 )
 
 rollout renderParameters "Render"
 (
 	groupbox grp_2 "Render as" pos:[10,10] height:145 width:200 
-	radiobuttons renderTypeRdb pos:[20,40] labels:#("Meshes", "Instances") columns:2 default:1 offsets:#([0,0],[5,0]) tooltip:"" 
+	--radiobuttons renderTypeRdb pos:[20,40] labels:#("Meshes", "Instances", "Point Cloud") columns:3 default:1 offsets:#([0,0],[-05,0],[-20,0]) tooltip:"" 
+	dropdownList renderTypeDrp pos:[20,35] items:#("Meshes", "Instances", "Point Cloud") width:185
 	groupbox grp_3 "Interfaces" pos:[20,65] height:50 width:180 
-	checkbox vrayInterfaceChk "Vray" pos:[30,90] checked:on
+	checkbox vrayInterfaceChk "VRay" pos:[30,90] checked:on
 	checkbox ptcInterfaceChk "Particle" pos:[100, 90] checked:off
 	spinner renderPercentSpn "Render %: " range:[0,100,100] pos:[20,130] type:#float fieldWidth:40 enabled:on
-	button applyRenderBtn "Apply" width:100 height:40 pos:[60,170]
+	button applyRenderBtn "Apply" width:200 height:50 pos:[12,165] 
 	
 	
 	on applyRenderBtn pressed do 
 	(
-		---- Get the tyCaches (either selected or every tyCaches in the scene)
-		Array_tyCache = #()
-		if selOnly == false then for tc in (getClassInstances tyCache) do append Array_tyCache tc else for tc in selection where classof tc.baseobject == tyCache do append Array_tyCache tc
-		---------------------------
-		
-		if Array_tyCache.count > 0 then
+		if selectedTcs.count > 0 then
 		(
-			for i in Array_tyCache do 
+			for i in selectedTcs do 
 			(
-				i.renderMode = renderTypeRdb.state - 1
+				i.renderMode = renderTypeDrp.selection - 1
 				i.renderVRayInterface = vrayInterfaceChk.state
 				i.particleInterfaceEnabled = ptcInterfaceChk.state
 				i.renderpercent = renderPercentSpn.value
 			)
-			displayTempPrompt ("Render modifications applied on " + (Array_tyCache.count as string) + " tyCache(s) !") 10000
-			--messagebox ("Render modifications applied on " + (Array_tyCache.count as string) + " tyCache(s) !")title:title 
+			displayTempPrompt ("Render modifications applied on " + (selectedTcs.count as string) + " tyCache(s) !") 10000
 		)
-		else messagebox ("No tyCache to apply modification on")title:title 
+		else messagebox error_noTc title:title 
 	)
 )	
 
@@ -197,7 +216,7 @@ rollout timingParameters "Timing"
 	checkbox speedChk "Speed %: "  pos:[30,390] enabled:false
 	spinner speedSpn "" pos:[105,390] type:#float range:[-100000,100000,100] fieldwidth:60 enabled:false
 	
-	button applyMemoryBtn "Apply" pos:[60,435] width:100 height:40   
+	button applyMemoryBtn "Apply" pos:[17,430] width:185 height:50
 	
 	local outOfRangeVal = 0
 
@@ -282,12 +301,7 @@ rollout timingParameters "Timing"
 	
 	on applyMemoryBtn pressed do
 	(
-		---- Get the tyCaches (either selected or every tyCaches in the scene)
-		Array_tyCache = #()
-		if selOnly == false then for tc in (getClassInstances tyCache) do append Array_tyCache tc else for tc in selection where classof tc.baseobject == tyCache do append Array_tyCache tc
-		---------------------------
-		
-		if Array_tyCache.count > 0 then 
+		if selectedTcs.count > 0 then 
 		(
 			if offsetChk.state == true or clampRdb.state != 2 or retimerRdb.state != 2 then
 			(
@@ -297,7 +311,7 @@ rollout timingParameters "Timing"
 				clampUserCount = 0 
 				retimerUserCount = 0
 				-------------------------
-				for i in Array_tyCache do -- for each tyCache
+				for i in selectedTcs do -- for each tyCache
 				(
 					minVal = 0
 					maxVal = 100
@@ -420,18 +434,16 @@ rollout timingParameters "Timing"
 				UserCountArr = #()	
 				append UserCountArr offsetUserCount ; append UserCountArr clampUserCount ; append UserCountArr retimerUserCount
 				displayTempPrompt ("Timings modifications applied on " + ((amax UserCountArr) as string) + " tyCache(s) !") 10000
-				--messagebox ("Timings modifications applied on " + ((amax UserCountArr) as string) + " tyCache(s) !")title:title 
 			)
 			else messagebox ("Please choose at least one timing option")title:title 
 		)
-		else messagebox ("No tyCache to apply modification on")title:title 
+		else messagebox error_noTc title:title 
 	)
 	
 )
 
 CreateDialog tcControl
-AddSubRollout tcControl.displayParam tyCachesInScene rolledUp:false
-AddSubRollout tcControl.displayParam displayParameters rolledUp:true
+AddSubRollout tcControl.displayParam displayParameters rolledUp:false
 AddSubRollout tcControl.displayParam renderParameters rolledUp:true
 AddSubRollout tcControl.displayParam timingParameters rolledUp:true
 

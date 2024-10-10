@@ -26,36 +26,35 @@ rollout tyFlowExport title height:570 width:260
 	button selectBtn "Sel. in Scene" pos:[130,165] tooltip:"Select in scene the selected items in the list"
 	subrollout displayParam "Display" 
 	
-
+	--this function collect all tyFlows in the scene and display their name in the listbox
 	fn refreshList listbox bool =
 	(
 		tfs = #()
-		if bool == true do (messageBox("tyCache(s) might have been deleted. Automatic refresh of the list.")title:title)
-		
+		if bool == true do (messageBox("tyFlow(s) might have been deleted. Automatic refresh of the list.")title:title)
 		tfs = for tf in objects where classof tf.baseObject == tyFlow collect tf
-		--for tf in tfs do append tfs tf
 		listbox.items = for tf in tfs collect tf.name
 		listbox.text = "tyFlows in scene : " + tfs.count as string
 	)
 	
 	on tyFlowExport open do refreshList mlb false
 		
+	--reload the list
 	on refreshBtn pressed do 
 	(
 		refreshList mlb false
 		mlb.selection = #()
 		selectedTfs = #()
 	)
-		
-	on selectAll pressed do 
+	
+	 -- Select all items in list	
+	on selectAll pressed do
 	(
 		selectedTfs = #()
 		mlb.selection = for i = 1 to mlb.items.count collect i
 		selectedTfs = tfs
-			
-	) -- Select all items in list
+	) 
 	
-	
+	--When selected in list
 	on mlb selectionEnd do 
 	(
 		refreshList mlb false
@@ -69,27 +68,29 @@ rollout tyFlowExport title height:570 width:260
 		)
 	)
 	
+	--Clear Selection in List
 	on mlb rightClick do 
 	(
 		mlb.selection = #()
 		selectedTfs = #()
 	)
+	
+	--Select specified object in viewport
 	on mlb doubleClicked arg do 
 	(
 		try(select selectedTfs) 
 		catch (refreshList mlb true)
 	)
 	
-	on selectBtn pressed do -- Select in scene the selected items in list
+	--Select list selection in viewport
+	on selectBtn pressed do 
 	(
 		try(select selectedTfs) 
 		catch (refreshList mlb true)
 	)
 	
-	on helpBtn pressed do 
-	(
-		messagebox("This script allows you to add Export Particles operators in multiples tyFlows.\nIt also allows to batch the exports.\n\nCreated by Victor Burtman")title:title
-	)
+	on helpBtn pressed do messagebox("This script allows you to add Export Particles operators in multiples tyFlows.\nIt also allows to batch the exports.\n\nCreated by Victor Burtman")title:title
+
 	
 )
 
