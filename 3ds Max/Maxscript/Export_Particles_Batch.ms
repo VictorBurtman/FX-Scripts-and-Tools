@@ -16,7 +16,7 @@ selectedTfs = #() -- tyFlows selected in the list
 
 modes = #(#("Objects","none","none","exportObjects"),#("PRT",".prt","PRTFilename","exportPRT"),#("tyCache",".tyc","tyCacheFilename","exportTyCache"),#("Alembic Point Cloud",".abc","alembicFilename","exportAlembic_PC"),#("Alembic Mesh",".abc","alembicMeshFilename","exportAlembic_Mesh"),#("VRay Proxy",".vrmesh", "vrmeshFilename","exportVRay"),#("tyCache Splines",".tyc","tyCacheFilename","exportTyCache"))	
 
-rollout tyFlowExport title height:570 width:260
+rollout tyFlowExport title height:590 width:260
 (
 	multiListBox mlb "tyFlow(s) in scene"
 	button refreshBtn "Refresh" pos:[20,165]
@@ -228,7 +228,8 @@ rollout createExport "CREATE OPERATORS"
 rollout Export "EXPORT THE PARTICLES" 
 (
 	radiobuttons whichExportRdb "" labels:#("All Export operators", "Only in \"EXPORT\" events ") columns:1 default:1 offsets:#([0,3], [0,8]) tooltip:"All : Every export particles operators will be evaluated.\n\nOnly in \"EXPORTS\" events : Only Export Particles Operators in events named \"EXPORT\" will be evaluated"
-	button exportParticlesBtn "Export Particles" width:200 height:50 pos:[12,57] 
+	checkbox refreshChk "Reset Simulation" 
+	button exportParticlesBtn "Export Particles" width:200 height:50 pos:[12,77] 
 	
 	on exportParticlesBtn pressed do
 	(
@@ -255,9 +256,12 @@ rollout Export "EXPORT THE PARTICLES"
 								opnames = getpropnames p -- get properties names of the event
 								for o in opnames where (o == #Export_Particles) do 
 								(
+									sliderTime = animationRange.start
 									op = getproperty p o -- get the export particles operator
 									mode = getProperty op "exportMode" -- get its mode (tyCache, PRT...)
 									export = getProperty op modes[mode+1][4] -- retrieve the right function
+									if refreshChk.state == true do i.reset_simulation()
+									if i.enabled == false do i.enabled = true
 									export() --execute the export function
 									count += 1
 								)
