@@ -195,14 +195,14 @@ rollout createExport "CREATE OPERATORS"
 						ev1.setName "EXPORT"
 						expt = ev1.addOperator "export particles" -1
 						
+						expt.exportMode = exportTypeDrp.selection as integer -1 --define the type of export
 						
 						if (modes[exportTypeDrp.selection][2]) !="none" do --for every export operators except objects
 						(
 							exportPath = folder + "\\" + i.name + "\\export_" + modes[exportTypeDrp.selection][2] -- define the export path
-							expt.exportMode = exportTypeDrp.selection as integer -1 --define the type of export
 							setProperty expt modes[exportTypeDrp.selection][3] exportPath -- set the export path
-							append exportOps expt
 						)
+						append exportOps expt
 						count += 1
 					)
 				)
