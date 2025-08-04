@@ -1,0 +1,73 @@
+public void simulationStart()
+{
+
+}
+
+public void simulationStep()
+{		
+
+	for (int i = 0; i < eventParticleCount; i++) //this for-loop iterates through all particles in this event				
+	{
+		int sInx = tf.GetSimIndex(i); //for each event particle, we fetch its simulation index
+
+     // Fetch the particle's velocity vector
+        Point3 velocity = tf.GetVel(sInx);
+
+        // Cr�er une matrice d'identit� manuellement
+        Matrix3 rotationMatrix = new Matrix3(
+            new Point3(1, 0, 0), // Ligne 1
+            new Point3(0, 1, 0), // Ligne 2
+            new Point3(0, 0, 1), // Ligne 3
+            new Point3(0, 0, 0)  // Ligne 4 (translation, non utilis�e ici)
+        );
+
+        // Appliquer une rotation de 90 degr�s autour de l'axe Y
+        rotationMatrix.PreRotate(0, (float)-90.0); // 1 = Axe Y
+
+        // Transformer le vecteur
+        Point3 rotatedVelocity = rotationMatrix.VectorTransform(velocity);
+
+        // Mettre � jour la v�locit�
+       
+        // Update the velocity vector
+        tf.SetCustomVector(sInx, "point_velocity", rotatedVelocity);	
+	}	
+
+}
+
+public void simulationStepThreaded(int startInx, int endInx, int threadInx)					
+{
+	/*
+	This function allows for multi-threaded particle 
+	scripting. It is disabled by default. To switch to threaded 
+	mode, call 'tf.SetThreaded(true);' in 'simulationStart'.
+
+	The arguments 'startInx' and 'endInx' point to the start
+	and end index of a chunk of event particles that each 
+	thread will process in parallel.
+
+	The argument 'threadInx' is the index of the current thread.
+
+	If you want to have simulationStepThreaded evaluate multiple
+	times in the same time step (ex: you are multithreading an 
+	iterative solver), you can call tf.SetThreadedIterations(n) to
+	set the number of times the threads will re-evaluate this function.
+	The iterator will wait for all threads to complete their tasks 
+	before starting the next iteration. tf.GetThreadedIteration() 
+	can	be called to determine the current iteration of the 
+	iteration loop.
+
+	Please make sure you understand the limits of 
+	multithreading in 3dsmax before enabling this feature!						
+	*/
+}
+
+public void postSimulationStep()
+{
+	/*
+	This single-threaded function is called after simulationStep and 
+	simulationStepThreaded. Its main purpose is to provide a place 
+	to process and synchronize data collected by multiple threads 
+	after the call to simulationStepThreaded is complete.
+	*/
+}
