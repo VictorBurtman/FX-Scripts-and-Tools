@@ -1,5 +1,15 @@
+# ==========================
+# ||  Percentage Calculator
+# ||  A Maya dialog tool for common percentage calculations
+# ||  Author: Victor Burtman, 2025
+# ||  victorburtman@gmail.com
+# ==========================
+# Note: This script uses PySide2, which is bundled with Maya 2022 and earlier.
+# For Maya 2025 and above, replace `from PySide2` with `from PySide6`.
+
 import maya.cmds as cmds
 from PySide2 import QtWidgets, QtCore
+
 
 class PercentageCalculator(QtWidgets.QDialog):
     def __init__(self, parent=None):
@@ -11,7 +21,7 @@ class PercentageCalculator(QtWidgets.QDialog):
     def initUI(self):
         layout = QtWidgets.QVBoxLayout()
 
-        # First row
+        # --- Row 1: X% of Y ---
         hbox1 = QtWidgets.QHBoxLayout()
         self.spn1 = QtWidgets.QSpinBox()
         self.spn1.setRange(0, 10000)
@@ -26,7 +36,7 @@ class PercentageCalculator(QtWidgets.QDialog):
         hbox1.addWidget(self.lbl1)
         layout.addLayout(hbox1)
 
-        # Second row
+        # --- Row 2: What percentage is X of Y ---
         hbox2 = QtWidgets.QHBoxLayout()
         self.spn3 = QtWidgets.QSpinBox()
         self.spn3.setRange(0, 10000)
@@ -41,7 +51,7 @@ class PercentageCalculator(QtWidgets.QDialog):
         hbox2.addWidget(self.lbl2)
         layout.addLayout(hbox2)
 
-        # Third row
+        # --- Row 3: Percentage difference between X and Y ---
         hbox3 = QtWidgets.QHBoxLayout()
         self.spn5 = QtWidgets.QSpinBox()
         self.spn5.setRange(-10000, 10000)
@@ -57,12 +67,12 @@ class PercentageCalculator(QtWidgets.QDialog):
         hbox3.addWidget(self.lbl3)
         layout.addLayout(hbox3)
 
-        # Fourth row
+        # --- Row 4: Add X% to Y ---
         hbox4 = QtWidgets.QHBoxLayout()
         self.spn7 = QtWidgets.QSpinBox()
-        self.spn7.setRange(-10000, 10000)  # Allow negative values
+        self.spn7.setRange(-10000, 10000)
         self.spn8 = QtWidgets.QSpinBox()
-        self.spn8.setRange(-10000, 10000)  # Allow negative values
+        self.spn8.setRange(-10000, 10000)
         self.lbl4 = QtWidgets.QLabel("= 0.0")
         self.lbl4.setFrameStyle(QtWidgets.QFrame.Sunken | QtWidgets.QFrame.Panel)
 
@@ -73,13 +83,13 @@ class PercentageCalculator(QtWidgets.QDialog):
         hbox4.addWidget(self.lbl4)
         layout.addLayout(hbox4)
 
-        # Help button
+        # --- Help button ---
         self.btnHelp = QtWidgets.QPushButton("Help")
         layout.addWidget(self.btnHelp)
 
         self.setLayout(layout)
 
-        # Connect signals
+        # Connect spinbox signals to their respective update methods
         self.spn1.valueChanged.connect(self.update_lbl1)
         self.spn2.valueChanged.connect(self.update_lbl1)
         self.spn3.valueChanged.connect(self.update_lbl2)
@@ -91,10 +101,12 @@ class PercentageCalculator(QtWidgets.QDialog):
         self.btnHelp.clicked.connect(self.show_help)
 
     def update_lbl1(self):
+        """Row 1: Computes V2 * (V1 / 100)"""
         value = self.spn2.value() * (self.spn1.value() / 100)
         self.lbl1.setText(f"= {value:.1f}")
 
     def update_lbl2(self):
+        """Row 2: Computes (V1 / V2) * 100 — guards against division by zero"""
         if self.spn4.value() > 0:
             value = (self.spn3.value() / self.spn4.value()) * 100
             self.lbl2.setText(f"= {value:.1f} %")
@@ -102,6 +114,7 @@ class PercentageCalculator(QtWidgets.QDialog):
             self.lbl2.setText("= 0.0 %")
 
     def update_lbl3(self):
+        """Row 3: Computes ((V2 - V1) / V1) * 100 — guards against division by zero"""
         if self.spn5.value() != 0:
             value = ((self.spn6.value() - self.spn5.value()) / self.spn5.value()) * 100
             self.lbl3.setText(f"= {value:.1f} %")
@@ -109,18 +122,21 @@ class PercentageCalculator(QtWidgets.QDialog):
             self.lbl3.setText("= 0.0 %")
 
     def update_lbl4(self):
+        """Row 4: Computes V2 + (V2 * (V1 / 100))"""
         value = self.spn8.value() + (self.spn8.value() * (self.spn7.value() / 100))
         self.lbl4.setText(f"= {value:.1f}")
 
     def show_help(self):
+        """Displays the formula reference for each row."""
         help_text = (
-            "First formula: V2 * (V1 / 100)\n\n"
-            "Second formula: (V1 / V2) * 100\n\n"
-            "Third formula: ((V2 - V1) / V1) x 100\n\n"
-            "Fourth formula: V2 + (V2 * (V1 / 100))"
+            "Row 1 — X% of Y:                V2 * (V1 / 100)\n\n"
+            "Row 2 — X is what % of Y:        (V1 / V2) * 100\n\n"
+            "Row 3 — % difference X to Y:     ((V2 - V1) / V1) * 100\n\n"
+            "Row 4 — Add X% to Y:             V2 + (V2 * (V1 / 100))"
         )
         QtWidgets.QMessageBox.information(self, "Help", help_text)
 
-# Show the dialog
+
+# Launch the dialog
 dialog = PercentageCalculator()
 dialog.show()
