@@ -1,4 +1,11 @@
-# Reveal the hip file in windows explorer
+# ==========================
+# ||  Open Scene Folder from Houdini shelf
+# ||  Reveal the hip file in windows explorer
+# ||  Author: Victor Burtman, 2025
+# ||  victorburtman@gmail.com
+# ||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
+# ==========================
+
 import os
 path = hou.hscriptExpression('$HIP')
 path = os.path.realpath(path)
