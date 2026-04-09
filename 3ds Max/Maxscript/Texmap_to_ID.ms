@@ -2,9 +2,9 @@
 ||  Texmap to Multisub
 ||  Create a multisub whose each sub id contains the state of an animated texture. 
 ||  Author: Victor Burtman 
-||  www.victorburtman.com 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 ==========================*/
-
 
 clearlistener()
 titleMessagebox = "Texmap to ID"
