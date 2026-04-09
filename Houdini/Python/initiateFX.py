@@ -1,7 +1,12 @@
 
-### Will merge animated geometry and environnement in your context ###
-### EXECUTE IT IN A HOUDINI PYTHON SOP NODE ###
-### feel free to use it and adapt it to your own needs###
+# ==========================
+# ||  Will merge animated geometry and environnement in your context
+# ||  EXECUTE IT IN A HOUDINI PYTHON SOP NODE
+# ||  feel free to use it and adapt it to your own needs
+# ||  Author: Victor Burtman, 2023
+# ||  victorburtman@gmail.com
+# ||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
+# ==========================
 
 ### GET CURRENT CONTEXT ###
 desktop = hou.ui.curDesktop()
