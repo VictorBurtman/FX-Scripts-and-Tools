@@ -45,7 +45,6 @@ Improve your worflow using [maxscript](https://www.youtube.com/watch?v=VMQv5Tydd
 
 For suggestions or bug reports, feel free to reach out at **victorburtman@gmail.com**.
 
-Explore more of my work on my [gumroad]((https://victorburtman.gumroad.com/)).
-
+Explore more of my work on my [Gumroad](https://victorburtman.gumroad.com/)
 Enjoy!
 
