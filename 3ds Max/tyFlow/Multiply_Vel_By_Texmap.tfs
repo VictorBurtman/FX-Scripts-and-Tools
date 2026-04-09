@@ -6,7 +6,8 @@
 ||	If there are several objects, the nearest one will be used to influence the particles. 
 ||	Make sure to have "Speed Multiplier" and "Frame Duration" exposed as accessible floats values.
 ||  Author: Victor Burtman 
-||  www.victorburtman.com 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 ==========================*/
 
 public void simulationStart()
