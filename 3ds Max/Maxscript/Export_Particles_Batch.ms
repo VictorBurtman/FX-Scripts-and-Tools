@@ -3,7 +3,8 @@
 ||  Add Export Particles operators in multiples tyFlows and batch their exports
 ||	tyFlow plugin is required 
 ||  Author: Victor Burtman 
-||  www.victorburtman.com 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 ==========================*/
 
 clearListener()
