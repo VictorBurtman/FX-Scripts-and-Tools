@@ -2,7 +2,8 @@
 ||  Turbosmooth Controller
 ||  Add, Remove or Control turbosmooths on selected objects.
 ||  Author: Victor Burtman 
-||  www.victorburtman.com 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 ==========================*/
 
 titleMessagebox = "Turbosmooth"
