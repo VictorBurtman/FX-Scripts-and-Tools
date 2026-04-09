@@ -3,7 +3,8 @@
 ||  Create a tyBind helper for each selected object that has a parent. Useful in a tyActor worflow. 
 ||	tyFlow plugin is required 
 ||  Author: Victor Burtman 
-||  www.victorburtman.com 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 ==========================*/
 
 title = "Auto RIG tyBind"
