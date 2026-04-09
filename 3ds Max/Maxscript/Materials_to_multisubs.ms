@@ -3,7 +3,8 @@
 ||  Combine the materials of each selected object into a multisub.
 ||	Can assign a tyProperties modifier to each object with a custom float value corresponding to their material location in the multisub.
 ||  Author: Victor Burtman 
-||  www.victorburtman.com 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 ==========================*/
 
 title = "Materials to Multisub"	
