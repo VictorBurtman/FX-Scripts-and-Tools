@@ -1,5 +1,11 @@
-#Bunch of operations and cache the geometry
-#it will look for 2 specific nodes to cache (character and environment in this specific case), but you can adapt it to your own needs :)
+# ==========================
+# ||  Bunch of operations and cache the geometry
+# ||  it will look for 2 specific nodes to cache (character and environment in this specific case), but you can adapt it to your own needs :)
+# ||  Reveal the hip file in windows explorer
+# ||  Author: Victor Burtman, 2023
+# ||  victorburtman@gmail.com
+# ||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
+# ==========================
 
 import hou
 
