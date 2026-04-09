@@ -3,7 +3,8 @@
 ||  Combine all the multimaterials of your selected objects and generate a tyFlow script to play the different sequences.
 ||	tyFlow plugin is required.
 ||  Author: Victor Burtman 
-||  www.victorburtman.com 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 ==========================*/
 
 clearlistener()
