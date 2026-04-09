@@ -3,6 +3,7 @@
 # ||  Convert a binary USDC file to a human-readable USDA (ASCII) file
 # ||  Author: Victor Burtman, 2025
 # ||  victorburtman@gmail.com
+# ||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 # ==========================
 
 from pxr import Usd, UsdUtils, Sdf
