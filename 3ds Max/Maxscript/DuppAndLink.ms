@@ -2,7 +2,8 @@
 ||  Dupplicate and Link
 ||  Dupplicate an object and align / link it to every selected object.
 ||  Author: Victor Burtman 
-||  www.victorburtman.com 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 ==========================*/
 
 title = "Clones on target"
