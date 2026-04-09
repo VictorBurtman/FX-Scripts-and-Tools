@@ -2,7 +2,8 @@
 ||  Lock Unlock
 ||  Easily lock and unlock all transforms of selected objects
 ||  Author: Victor Burtman 
-||  www.victorburtman.com 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 ==========================*/
 
 Try(DestroyDialog lockUnlock) Catch()
