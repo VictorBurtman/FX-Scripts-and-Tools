@@ -1,3 +1,11 @@
+/*==========================
+||  Dot Product
+||  Check if a particle is above or below a surface, using dot product
+||  Author: Victor Burtman 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
+==========================*/
+
 public void simulationStart()
 {
 
