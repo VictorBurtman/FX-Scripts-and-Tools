@@ -3,6 +3,7 @@
 # ||  A Maya dialog tool for common percentage calculations
 # ||  Author: Victor Burtman, 2025
 # ||  victorburtman@gmail.com
+# ||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 # ==========================
 # Note: This script uses PySide2, which is bundled with Maya 2022 and earlier.
 # For Maya 2025 and above, replace `from PySide2` with `from PySide6`.
