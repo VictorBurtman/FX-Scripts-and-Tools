@@ -2,8 +2,10 @@
 ||  Sort by Material or Object ID
 ||  Sort the selected objects into different layers according to their material ID or Object ID
 ||  Author: Victor Burtman 
-||  www.victorburtman.com 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 ==========================*/
+
 titleMessagebox = "Sort by Obj/Mat ID"
 try(destroydialog separateByMatID)catch()
 rollout separateByMatID titleMessagebox width:200
