@@ -1,4 +1,3 @@
-
 # ==========================
 # ||  Will merge animated geometry and environnement in your context
 # ||  EXECUTE IT IN A HOUDINI PYTHON SOP NODE
