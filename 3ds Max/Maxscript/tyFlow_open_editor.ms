@@ -3,7 +3,8 @@
 ||  Simple access the tyFlow editor. Use it as a macro script.
 ||	tyFlow plugin is required
 ||  Author: Victor Burtman 
-||  www.victorburtman.com 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 ==========================*/
 
 tyFlowArray = for i in (getClassInstances tyFlow) collect i 
