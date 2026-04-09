@@ -3,7 +3,8 @@
 ||  Load / Open files and create previews using the tyPreview tool.
 ||	tyFlow plugin is required
 ||  Author: Victor Burtman 
-||  www.victorburtman.com 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 ==========================*/
 
 try (destroydialog test)catch()
