@@ -3,7 +3,8 @@
 ||  Assign a tyProperties modifier to each selected objects with a custom float corresponding to their Object ID. 
 ||	tyFlow plugin is required
 ||  Author: Victor Burtman 
-||  www.victorburtman.com 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 ==========================*/
 
 try (destroydialog tyPropertiesRollout)catch()
