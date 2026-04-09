@@ -1,7 +1,7 @@
 # ==========================
 # ||  Open Scene Folder from Houdini shelf
 # ||  Reveal the hip file in windows explorer
-# ||  Author: Victor Burtman, 2025
+# ||  Author: Victor Burtman, 2023
 # ||  victorburtman@gmail.com
 # ||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 # ==========================
