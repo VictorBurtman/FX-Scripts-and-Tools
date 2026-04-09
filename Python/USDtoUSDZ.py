@@ -3,6 +3,7 @@
 # ||  Convert a USD to USDZ by including all its textures
 # ||  Author: Victor Burtman, 2025
 # ||  victorburtman@gmail.com
+# ||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 # ==========================
 
 from pxr import Usd, UsdUtils, Sdf
