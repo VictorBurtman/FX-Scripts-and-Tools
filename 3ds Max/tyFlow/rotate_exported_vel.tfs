@@ -1,3 +1,12 @@
+/*==========================
+||  Rotate Exported Velocity
+||  Apply a 90degrees rotation on the velocity Y axis and save it in a new custom vector called "point_velocity". Usefull for exporting particles into another DCC. 
+||  Note : tyFlow has a native option to perform this operation when exporting particles, so this script is sort of deprecated. But this method can still be used for other purposes. 
+||  Author: Victor Burtman 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
+==========================*/
+
 public void simulationStart()
 {
 
@@ -13,21 +22,19 @@ public void simulationStep()
      // Fetch the particle's velocity vector
         Point3 velocity = tf.GetVel(sInx);
 
-        // Cr�er une matrice d'identit� manuellement
+        // Create an identity matrix manually 
         Matrix3 rotationMatrix = new Matrix3(
-            new Point3(1, 0, 0), // Ligne 1
-            new Point3(0, 1, 0), // Ligne 2
-            new Point3(0, 0, 1), // Ligne 3
-            new Point3(0, 0, 0)  // Ligne 4 (translation, non utilis�e ici)
+            new Point3(1, 0, 0), // Line 1
+            new Point3(0, 1, 0), // Line 2
+            new Point3(0, 0, 1), // Line 3
+            new Point3(0, 0, 0)  // Line 4 (translation, non used in our case)
         );
 
-        // Appliquer une rotation de 90 degr�s autour de l'axe Y
+        // Apply a 90 degrees rotation around Y axis 
         rotationMatrix.PreRotate(0, (float)-90.0); // 1 = Axe Y
 
-        // Transformer le vecteur
+        // Transform the vector
         Point3 rotatedVelocity = rotationMatrix.VectorTransform(velocity);
-
-        // Mettre � jour la v�locit�
        
         // Update the velocity vector
         tf.SetCustomVector(sInx, "point_velocity", rotatedVelocity);	
