@@ -2,8 +2,10 @@
 ||  Copy Modifiers
 ||  Copy a modifier present on one object to selected objects.
 ||  Author: Victor Burtman 
-||  www.victorburtman.com 
+||  victorburtman@gmail.com
+||  https://github.com/VictorBurtman/FX-Scripts-and-Tools
 ==========================*/
+
 title = "Copy modifier"
 try(destroydialog duppModifier)catch()
 rollout duppModifier title
