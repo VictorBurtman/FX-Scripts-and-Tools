@@ -1,0 +1,6 @@
+name "FX Toolkit Network"
+description "FX toolbar, network macros, icons and tyPreview Shift+V for 3ds Max 2022"
+version 1
+run "install.ms"
+drop "install.ms"
+clear temp on MAX exit

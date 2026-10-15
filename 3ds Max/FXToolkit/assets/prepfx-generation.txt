@@ -1,0 +1,7 @@
+PrepFX icon - 2026-10-12
+Generated with the built-in image_gen tool (transparent_background=true).
+Source: prepfx-source.png. Exports: ../package/icons/prepfx_*.
+Design: a cyan cube with a checkmark cutout; no text.
+
+Final generation prompt:
+Use case: logo-brand. Asset type: replacement PrepFX toolbar icon for 3ds Max, delivered as one square transparent PNG. Create a very simple, professional flat symbol for preparing a 3D scene: one bold cyan/turquoise isometric cube silhouette with a large clean checkmark cut out as transparent negative space across its front. The checkmark is the dominant readable feature; minimal cube geometry, no thin wireframe lines. Designed to remain unmistakable when reduced to 16 and 24 pixels. Center a single compact mark occupying approximately 85 percent of the canvas with balanced padding. Crisp vector-like edges, uniform solid color, true alpha transparency. No words, no letters, no caption, no border, no surrounding tile, no shadows, no glow, no gradient, no texture, no mockup, no extra symbols. Only one icon.

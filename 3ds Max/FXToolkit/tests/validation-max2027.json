@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "max_version": "#(29000, 70, 0, 29, 0, 0, 3590, 2027, \"\")",
+  "checks": [
+    "Native MZP installation 1: nine macros, one toolbar, five icons, Shift+V verified by Max",
+    "Native MZP installation 2: nine macros, one toolbar, five icons, Shift+V verified by Max",
+    "Startup bootstrap and Copy Path on an unsaved scene",
+    "Standalone GeoInspector network MZP extraction"
+  ]
+}
