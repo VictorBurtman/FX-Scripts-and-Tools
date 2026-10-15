@@ -4,8 +4,8 @@ INSTALLATION
 Glisser dist/FXToolkit_Network.mzp dans un viewport de 3ds Max.
 La barre FX apparait en haut. Elle est deplacable et detachable.
 Ses dix boutons appellent des macros de la categorie FX :
-Patafix, PrepFX, Vecmap, Toolbox, tyFlow Open, Copy Path, Caches Path, tyPreview,
-GeoInspector Pro, Footages.
+Patafix, PrepFX, Vecmap, Toolbox, tyFlow Open, Scene Path, Caches Path, Footages Path,
+tyPreview, GeoInspector Pro.
 Les outils avec icones utilisent les fichiers originaux, sauf PrepFX dont
 le nouveau symbole est un cube turquoise avec une coche. Les autres ont
 un bouton texte. tyPreview n'a pas d'icone.
@@ -30,7 +30,7 @@ Vecmap necessite vecmap.py ET le dossier vecmap_lib sur le serveur.
 Les dependances propres aux outils restent celles de leurs projets.
 
 DEPLOIEMENT SERVEUR
-Decompresser dist/FXToolkit_Server.zip et copier son dossier 00_Lib dans Q:\fx\fx_tools\3dsMax\.
+Decompresser dist/FXToolkit_Server.zip et copier ses dossiers 00_Lib et Scene dans Q:\fx\fx_tools\3dsMax\.
 Conserver le fichier 00_Lib\productions.cfg s'il a deja ete personnalise.
 Les deux paquets a distribuer sont FXToolkit_Network.mzp pour les postes
 et FXToolkit_Server.zip pour le serveur (bibliotheque et productions).
@@ -45,7 +45,8 @@ Le lanceur GeoInspector est inclus dans FXToolkit_Network.mzp.
 Le script serveur deja installe ne figure plus dans le ZIP serveur.
 
 CACHES PATH / BIBLIOTHEQUE PARTAGEE
-Le bouton charge Q:\fx\fx_tools\3dsMax\00_Lib\FXSceneContext.ms,
+Le bouton lance Q:\fx\fx_tools\3dsMax\Scene\Caches_path\cache_path.ms,
+qui charge la bibliotheque 00_Lib\FXSceneContext.ms,
 detecte la production, l'episode et le shot de la scene sauvegardee,
 cree les dossiers de cache manquants puis copie le chemin dans le pressepapier.
 Pour une prod Max : <racine>\<episode>\fx\3D_Sources\<shot>
@@ -64,7 +65,23 @@ La racine de production et l'episode doivent deja exister (ainsi que le shot
 pour Maya) ; les dossiers de caches sont crees recursivement si necessaire.
 L'API MAXScript et son utilisation depuis Python sont documentees dans
 server/00_Lib/README.txt dans le depot. Le ZIP serveur contient uniquement
-00_Lib/FXSceneContext.ms et 00_Lib/productions.cfg.
+00_Lib/FXSceneContext.ms, 00_Lib/productions.cfg,
+Scene/Caches_path/cache_path.ms et Scene/Footages_path/footages_path.ms.
+
+BOUTONS DE CHEMINS
+Les trois boutons sont adjacents : Scene Path, Caches Path, Footages Path.
+Scene Path est le nouveau nom de Copy Path : il copie le dossier de la scene.
+Les identifiants internes des macros restent stables pour les raccourcis.
+Footages Path lance Scene\Footages_path\footages_path.ms et utilise la meme
+bibliotheque pour copier le dossier des footages du shot :
+- Max : <racine footage>\<episode>\rendu-compo\<shot>\<episode>sr<num>_FX
+- Maya : <racine footage>\<episode>\<shot>\fx\wip\fx3d
+Pour Maya, le chemin s'arrete a fx3d, sans sous-dossier de version.
+Sans racine footage configuree, la racine scenes est utilisee comme dans PrepFX.
+Footages Path copie le chemin attendu sans creer de dossiers ni ouvrir Explorer.
+Caches Path conserve la creation des dossiers de caches manquants.
+Deployer la bibliotheque mise a jour et les deux scripts reseau avant de cliquer
+sur ces boutons. Le MZP contient uniquement leurs lanceurs.
 
 SHIFT+V / TYPREVIEW
 L'installateur exporte le jeu de raccourcis courant avec actionMan,
@@ -99,7 +116,7 @@ Tests hors Max : python -m unittest discover -s tests -p "test_*.py"
 
 VERIFICATION DANS MAX 2022
 1. Deployer le ZIP serveur, installer le MZP, verifier dix boutons et cinq icones.
-2. Cliquer chaque outil avec Q: accessible ; tester Copy Path sur une scene
+2. Cliquer chaque outil avec Q: accessible ; tester Scene Path sur une scene
    sauvegardee et une scene sans chemin.
 3. Verifier Shift+V dans le viewport puis dans le Hotkey Editor.
 4. Reinstaller : une seule barre ; les autres raccourcis restent presents.
@@ -116,7 +133,7 @@ Six tests Python reussis : contenu des archives, syntaxe Python 3.7,
 preservation des autres raccourcis/contextes et reapplication sans doublon.
 Test reel sous 3ds Max Batch 2027 (29.0.0.3590) reussi : installation MZP,
 reinstallation, dix macros, une seule barre, cinq icones, affectation
-Shift+V relue depuis Max, bootstrap de demarrage et Copy Path sans scene
+Shift+V relue depuis Max, bootstrap de demarrage et Scene Path sans scene
 sauvegardee.
 Bibliotheque MAXScript testee dans Max Batch 2027 : les deux chemins studio
 fournis, variantes de noms, CFG relu en direct, chemins UNC, cas invalides,

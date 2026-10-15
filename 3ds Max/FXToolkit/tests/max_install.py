@@ -39,6 +39,9 @@ def main():
             bars = GetQMaxMainWindow().findChildren(QtWidgets.QToolBar, module.OBJECT_NAME)
             assert len(bars) == 1, "Duplicate toolbar"
             assert len(bars[0].actions()) == 10
+            labels = [a.text() for a in bars[0].actions()]
+            index = labels.index("Scene Path")
+            assert labels[index:index + 3] == ["Scene Path", "Caches Path", "Footages Path"]
             assert sum(not a.icon().isNull() for a in bars[0].actions()) == 5
             assert (installed / "FX-tyPreview.hsx").is_file(), "Hotkey install failed"
             assigned = ET.parse(str(installed / "FX-tyPreview.hsx")).getroot()
@@ -53,7 +56,7 @@ def main():
         module = sys.modules["fx_toolkit_runtime"]
         bar = module.show_toolbar()
         bar.grab().save(str(OUTPUT / "toolbar.png"))
-        checks.append("Startup bootstrap and Copy Path on an unsaved scene")
+        checks.append("Startup bootstrap, adjacent path buttons and Scene Path on an unsaved scene")
     finally:
         if original_keyboard and not rt.actionMan.loadKeyboardFile(original_keyboard):
             raise RuntimeError("Unable to restore original hotkey file: " + original_keyboard)

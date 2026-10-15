@@ -1,4 +1,4 @@
-/* FXSceneContext 1.0 - shared, UI-independent scene context service.
+/* FXSceneContext 1.1 - shared, UI-independent scene context service.
    Loading this file does not create directories or change the clipboard.
    No Python dependency. Configuration is data, never evaluated as MAXScript.
 */
@@ -26,7 +26,7 @@ struct FXSC_Context
 
 struct FXSC_Service
 (
-    version = "1.0.0",
+    version = "1.1.0",
     libraryDirectory,
 
     fn clean value = trimLeft (trimRight value " \t\r\n") " \t\r\n",
@@ -228,6 +228,31 @@ struct FXSC_Service
         local context = resolve scenePath configPath:configPath
         if create do ensureCacheDirectory context
         context.cachePath
+    ),
+
+    fn buildFootagesPath context =
+    (
+        -- Return the shot footage folder; Maya versions live below this path.
+        local root = if context.footageRoot == "" then context.productionRoot else context.footageRoot
+        local base = (withSeparator root) + context.episode + "\\"
+        case context.pipeline of
+        (
+            "max_legacy":
+                base + "rendu-compo\\" + context.shot + "\\" + context.episode + "sr" + (substring context.shot 2 -1) + "_FX"
+            "maya_shots":
+                base + context.shot + "\\fx\\wip\\fx3d"
+            default: throw ("Unsupported production pipeline: " + context.pipeline)
+        )
+    ),
+
+    fn getFootagesPath scenePath configPath:undefined =
+        buildFootagesPath (resolve scenePath configPath:configPath),
+
+    fn copyCurrentFootagesPath configPath:undefined =
+    (
+        local path = buildFootagesPath (current configPath:configPath)
+        if not (setClipboardText path) do throw "Cannot write to the clipboard."
+        path
     ),
 
     fn copyCachePath scenePath configPath:undefined =

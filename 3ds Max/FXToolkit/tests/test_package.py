@@ -70,8 +70,16 @@ class PackageTests(unittest.TestCase):
             copy_path = z.read("macros/FX-FX_CopyPath.mcr").decode()
             self.assertIn('if maxfilepath != "" do setclipboardText maxfilepath', copy_path)
             caches = z.read("macros/FX-FX_CachesPath.mcr").decode()
-            self.assertIn("FXSceneContext.copyCurrentCachePath()", caches)
-            self.assertIn(r"Q:\fx\fx_tools\3dsMax\00_Lib\FXSceneContext.ms", caches)
+            self.assertIn(r"Q:\fx\fx_tools\3dsMax\Scene\Caches_path\cache_path.ms", caches)
+            self.assertIn("fileIn scriptPath", caches)
+            footages = z.read("macros/FX-FX_Footages.mcr").decode()
+            self.assertIn(r"Q:\fx\fx_tools\3dsMax\Scene\Footages_path\footages_path.ms", footages)
+            labels = [t["label"] for t in tools]
+            start = labels.index("Scene Path")
+            self.assertEqual(labels[start:start + 3], ["Scene Path", "Caches Path", "Footages Path"])
+            for tool in tools:
+                code = z.read("macros/FX-" + tool["macro"] + ".mcr").decode()
+                self.assertIn('toolTip:"%s"' % tool["label"], code)
             self.assertFalse(any(n.endswith("FXSceneContext.ms") for n in z.namelist()))
 
     def test_server_payload(self):
@@ -79,6 +87,7 @@ class PackageTests(unittest.TestCase):
             self.assertIsNone(z.testzip())
             self.assertEqual(set(z.namelist()), {
                 "00_Lib/FXSceneContext.ms", "00_Lib/productions.cfg",
+                "Scene/Caches_path/cache_path.ms", "Scene/Footages_path/footages_path.ms",
             })
             cfg = z.read("00_Lib/productions.cfg").decode("utf-8")
             self.assertEqual(sum(line.startswith("prod:") for line in cfg.splitlines()), 5)

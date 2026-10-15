@@ -14,8 +14,6 @@ def macro_source(tool, category="FX", name=None):
     else:
         if tool["kind"] == "python":
             command = 'python.executeFile scriptPath throwOnError:true clearUndoBuffer:false'
-        elif tool["kind"] == "cache_path":
-            command = 'global FXSceneContext; fileIn scriptPath; FXSceneContext.copyCurrentCachePath()'
         else:
             command = 'fileIn scriptPath'
         body = '''local scriptPath = @"%s"
@@ -67,8 +65,11 @@ def build():
                     if required not in contents:
                         raise FileNotFoundError(required)
     write_zip(ROOT / "dist" / "FXToolkit_Network.mzp", contents)
-    server = {"00_Lib/" + name: (ROOT / "server" / "00_Lib" / name).read_bytes()
-              for name in ("FXSceneContext.ms", "productions.cfg")}
+    server_files = (
+        "00_Lib/FXSceneContext.ms", "00_Lib/productions.cfg",
+        "Scene/Caches_path/cache_path.ms", "Scene/Footages_path/footages_path.ms",
+    )
+    server = {name: (ROOT / "server" / name).read_bytes() for name in server_files}
     write_zip(ROOT / "dist" / "FXToolkit_Server.zip", server)
 
 

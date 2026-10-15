@@ -4,7 +4,8 @@ DEPLOYMENT
 Copy this 00_Lib folder to Q:\fx\fx_tools\3dsMax\00_Lib\.
 FXSceneContext.ms and productions.cfg must be alongside each other.
 No Python package, local installation, or admin rights are required by the
-library. The Toolkit's Caches Path macro loads it from Q: on each click.
+library. The Caches Path and Footages Path network scripts load it on each click.
+Deploy those scripts into Scene/Caches_path and Scene/Footages_path respectively.
 Keep your customized productions.cfg when deploying subsequent updates.
 
 PRODUCTION REGISTRY
@@ -58,6 +59,15 @@ the Max cache shot folder. Repeating the operation preserves existing data.
 Unavailable shares, permissions and file/directory conflicts raise errors.
 Clipboard copying happens only after directory creation succeeds.
 
+FOOTAGE LAYOUTS
+The configured footage root is used, or the scene root when footageRoot is empty.
+Max: <footageRoot>\<episode>\rendu-compo\<shot>\<episode>sr<shotNumber>_FX
+Maya: <footageRoot>\<episode>\<shot>\fx\wip\fx3d
+Maya footage paths stop at fx3d, without a version subfolder. Scene versions
+and save suffixes do not change this path; no version in the filename is required.
+Footages Path copies the expected folder path
+without creating directories or opening Explorer.
+
 MAXSCRIPT API
   fileIn @"Q:\fx\fx_tools\3dsMax\00_Lib\FXSceneContext.ms"
   ctx = FXSceneContext.current()
@@ -80,6 +90,9 @@ Functions (configPath: is optional; defaults to this library's productions.cfg):
   FXSceneContext.ensureCacheDirectory ctx                  -- create folders
   FXSceneContext.copyCachePath fullScenePath                -- create + copy
   FXSceneContext.copyCurrentCachePath()                     -- create + copy
+  FXSceneContext.buildFootagesPath ctx                       -- read only
+  FXSceneContext.getFootagesPath fullScenePath                -- read only
+  FXSceneContext.copyCurrentFootagesPath()                    -- copy only
 
 loadProductions() returns records with name, root, footageRoot, pipeline,
 options, and a getOption key defaultValue:undefined method.

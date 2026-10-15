@@ -20,6 +20,7 @@ PySide2. The toolbar also supports PySide6 for newer Max versions.
 | `package/FXToolkit_startup.ms`, `package/runtime/bootstrap.py` | Recreate the toolbar when Max starts. |
 | `package/icons/`, `assets/` | Distributed icons and the generated PrepFX artwork/prompt. |
 | `server/00_Lib/` | Shared MAXScript scene context library, production records and API documentation. |
+| `server/Scene/Caches_path/`, `server/Scene/Footages_path/` | Network entry scripts using the shared library. |
 | `tests/` | Package/hotkey unit tests and native Max Batch installation and scene context tests. |
 | `dist/` | The complete `FXToolkit_Network.mzp` and `FXToolkit_Server.zip`. |
 
@@ -32,18 +33,20 @@ Files replaced during installation are backed up; failures in the main
 installation block attempt to restore the previous files.
 
 The ten macros launch Patafix, PrepFX, Vecmap, Toolbox, tyFlow Open,
-Copy Path, Caches Path, tyPreview, GeoInspector Pro, and Footages. Network tools are read
+Scene Path, Caches Path, Footages Path, tyPreview, and GeoInspector Pro. Network tools are read
 from the paths in `tools.json` when clicked; their sources are not installed
-locally. Copy Path copies `maxfilepath` only when it is nonempty.
+locally. Scene Path copies `maxfilepath` only when it is nonempty.
 
-Deploy `00_Lib` from `FXToolkit_Server.zip` into
-`Q:\fx\fx_tools\3dsMax\`. The ZIP contains only `00_Lib/FXSceneContext.ms`
-and `00_Lib/productions.cfg`. Documentation stays in the repository. GeoInspector is already
+Deploy `00_Lib` and `Scene` from `FXToolkit_Server.zip` into
+`Q:\fx\fx_tools\3dsMax\`. The ZIP contains `00_Lib/FXSceneContext.ms`,
+`00_Lib/productions.cfg`, `Scene/Caches_path/cache_path.ms`, and
+`Scene/Footages_path/footages_path.ms`. Documentation stays in the repository. GeoInspector is already
 deployed separately and is no longer bundled in this ZIP.
 
-The build prepares files locally and does not deploy them to Q:. Install the
-updated MZP so Caches Path uses the new `00_Lib` location. Other network tools
-continue using the paths in `tools.json`.
+The build prepares files locally and does not deploy them to Q:. Deploy the
+updated library and both network entry scripts, then install the updated MZP
+to apply the button labels, order, and launcher paths. The server ZIP contains
+exactly these four runtime/configuration files, with no README or DEPLOY file.
 
 The deployed library folder needs `FXSceneContext.ms` and `productions.cfg`
 side by side; `README.txt` is repository documentation, excluded from the ZIP. When migrating from
@@ -85,12 +88,12 @@ in `options`. Every lookup rereads this file; missing or invalid configuration
 fails without falling back to PrepFX. Preserve customized CFGs on updates.
 There is no separate example CFG.
 
-PrepFX has deliberately not been modified. Keep its existing `prepFX.cfg`
-until its loader is migrated to `Q:\fx\fx_tools\3dsMax\00_Lib\productions.cfg`.
-During this transition, production edits needed by both tools must be applied
-to both registries.
+PrepFX is maintained and deployed separately; these Toolkit changes do not
+modify its script. Any PrepFX installation still using `prepFX.cfg` must keep
+that file until its loader is migrated to the shared `00_Lib\productions.cfg`.
 
-The Caches Path macro loads this library, resolves the saved scene, creates
+The Caches Path macro loads `Scene/Caches_path/cache_path.ms`, which loads
+the shared library, resolves the saved scene, creates
 missing cache folders, then copies the path. Max productions use
 `<root>\<episode>\fx\3D_Sources\<shot>`; `pipeline=maya_shots` uses
 `<root>\<episode>\<shot>\fx\wip\3d\datas`. Unknown productions, ambiguous or
@@ -105,6 +108,35 @@ See [the library README](3ds%20Max/FXToolkit/server/00_Lib/README.txt) for
 the complete schema, API, and usage examples. Add productions in the active
 CFG without rebuilding the MZP; add pipeline layouts in the shared library
 with corresponding native tests.
+
+### Path buttons and network entry scripts
+
+The toolbar groups **Scene Path, Caches Path, Footages Path** together, in that
+order. Their internal macro IDs remain `FX_CopyPath`, `FX_CachesPath`, and
+`FX_Footages` to preserve existing bindings. Scene Path retains the original
+inline copy of `maxFilePath`. The other two macros only load their network
+scripts; both scripts load `00_Lib/FXSceneContext.ms` on each execution.
+
+`Scene/Footages_path/footages_path.ms` calls
+`FXSceneContext.copyCurrentFootagesPath()`. The library also exposes
+`getFootagesPath fullScenePath` and `buildFootagesPath context` for read-only
+lookups. The paths use the configured footage root (or the scene root when
+absent) and the following layouts:
+
+- Max: `<footageRoot>\<episode>\rendu-compo\<shot>\<episode>sr<shotNumber>_FX`.
+- Maya: `<footageRoot>\<episode>\<shot>\fx\wip\fx3d`.
+
+For example, Alice2 episode e322 shot s0780 resolves to
+`S:\alice2_footage\production\e322\rendu-compo\s0780\e322sr0780_FX`.
+BES2 episode e204 shot s0810 resolves to
+`S:\bes2_footage\shots\e204\s0810\fx\wip\fx3d`.
+
+Maya paths stop at `fx3d`, without a version subfolder. Filename versions and
+save suffixes do not change the result; unversioned filenames are also valid
+when the scene folders identify the shot. Footages Path copies the
+expected path without creating directories or opening Explorer. Caches Path
+retains its existing directory creation behavior. Deploy the updated library
+and both entry scripts, then reinstall the MZP to update labels and launchers.
 
 ### Hotkeys
 
@@ -148,6 +180,9 @@ Six package tests, ten-action installation/reinstallation, and the native
 scene context tests passed in Max Batch 2027 on October 15, 2026. The context
 tests include both user-provided studio paths, temporary cache directories,
 and automatic discovery of the adjacent registry after the move to `00_Lib`.
+They also cover the final Max/Maya footage layouts, Maya version independence,
+and dispatch from both network scripts to the shared library. Installation
+tests verify the three path buttons are adjacent in the requested order.
 This does not replace testing on Max 2022 and the studio
 network. Custom toolbar positioning across sessions is not guaranteed.
 
