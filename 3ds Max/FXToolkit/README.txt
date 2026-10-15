@@ -63,7 +63,8 @@ une erreur. Un lecteur indisponible ou un echec de creation ne copie rien.
 La racine de production et l'episode doivent deja exister (ainsi que le shot
 pour Maya) ; les dossiers de caches sont crees recursivement si necessaire.
 L'API MAXScript et son utilisation depuis Python sont documentees dans
-server/00_Lib/README.txt, egalement inclus dans le ZIP serveur.
+server/00_Lib/README.txt dans le depot. Le ZIP serveur contient uniquement
+00_Lib/FXSceneContext.ms et 00_Lib/productions.cfg.
 
 SHIFT+V / TYPREVIEW
 L'installateur exporte le jeu de raccourcis courant avec actionMan,

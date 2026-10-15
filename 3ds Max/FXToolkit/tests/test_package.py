@@ -78,14 +78,13 @@ class PackageTests(unittest.TestCase):
         with zipfile.ZipFile(ROOT / "dist/FXToolkit_Server.zip") as z:
             self.assertIsNone(z.testzip())
             self.assertEqual(set(z.namelist()), {
-                "DEPLOY.txt", "00_Lib/FXSceneContext.ms", "00_Lib/productions.cfg", "00_Lib/README.txt",
+                "00_Lib/FXSceneContext.ms", "00_Lib/productions.cfg",
             })
             cfg = z.read("00_Lib/productions.cfg").decode("utf-8")
             self.assertEqual(sum(line.startswith("prod:") for line in cfg.splitlines()), 5)
             self.assertNotIn("source:", cfg)
-            for source in (ROOT / "server").rglob("*"):
-                if source.is_file():
-                    self.assertEqual(z.read(source.relative_to(ROOT / "server").as_posix()), source.read_bytes())
+            for name in z.namelist():
+                self.assertEqual(z.read(name), (ROOT / "server" / name).read_bytes())
 
     def test_python_37_syntax(self):
         for source in (ROOT / "package").rglob("*.py"):

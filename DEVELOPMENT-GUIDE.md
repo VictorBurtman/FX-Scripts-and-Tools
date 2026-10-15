@@ -37,8 +37,8 @@ from the paths in `tools.json` when clicked; their sources are not installed
 locally. Copy Path copies `maxfilepath` only when it is nonempty.
 
 Deploy `00_Lib` from `FXToolkit_Server.zip` into
-`Q:\fx\fx_tools\3dsMax\`. The ZIP contains the library, its production
-registry, documentation, and deployment instructions. GeoInspector is already
+`Q:\fx\fx_tools\3dsMax\`. The ZIP contains only `00_Lib/FXSceneContext.ms`
+and `00_Lib/productions.cfg`. Documentation stays in the repository. GeoInspector is already
 deployed separately and is no longer bundled in this ZIP.
 
 The build prepares files locally and does not deploy them to Q:. Install the
@@ -46,7 +46,7 @@ updated MZP so Caches Path uses the new `00_Lib` location. Other network tools
 continue using the paths in `tools.json`.
 
 The deployed library folder needs `FXSceneContext.ms` and `productions.cfg`
-side by side; `README.txt` is documentation only. When migrating from
+side by side; `README.txt` is repository documentation, excluded from the ZIP. When migrating from
 `Scene\lib`, copy the new production records into `00_Lib\productions.cfg`
 instead of retaining the old `source:` redirect to PrepFX. Reinstall the MZP
 on each workstation to update the macro's stored path. The old example CFG

@@ -67,14 +67,8 @@ def build():
                     if required not in contents:
                         raise FileNotFoundError(required)
     write_zip(ROOT / "dist" / "FXToolkit_Network.mzp", contents)
-    server = {p.relative_to(ROOT / "server").as_posix(): p.read_bytes()
-              for p in (ROOT / "server").rglob("*") if p.is_file()}
-    server["DEPLOY.txt"] = (
-        "Copy 00_Lib into Q:\\fx\\fx_tools\\3dsMax\\.\n"
-        "00_Lib\\productions.cfg contains the production records directly.\n"
-        "Keep an existing customized productions.cfg when updating.\n"
-        "PrepFX is unchanged: retain its prepFX.cfg until its loader is migrated.\n"
-        "See 00_Lib\\README.txt for the shared MAXScript API.\n")
+    server = {"00_Lib/" + name: (ROOT / "server" / "00_Lib" / name).read_bytes()
+              for name in ("FXSceneContext.ms", "productions.cfg")}
     write_zip(ROOT / "dist" / "FXToolkit_Server.zip", server)
 
 
