@@ -33,12 +33,12 @@ def main():
             rt.fileIn(str(ROOT / "dist/FXToolkit_Network.mzp"))
             installed = run / "userScripts/FXToolkit"
             assert (installed / "fx_toolkit.py").is_file(), "Installer did not copy runtime"
-            assert len(list((run / "userMacros").glob("FX-FX_*.mcr"))) == 9
+            assert len(list((run / "userMacros").glob("FX-FX_*.mcr"))) == 10
             assert (run / "userStartupScripts/FXToolkit_startup.ms").is_file()
             module = sys.modules["fx_toolkit_runtime"]
             bars = GetQMaxMainWindow().findChildren(QtWidgets.QToolBar, module.OBJECT_NAME)
             assert len(bars) == 1, "Duplicate toolbar"
-            assert len(bars[0].actions()) == 9
+            assert len(bars[0].actions()) == 10
             assert sum(not a.icon().isNull() for a in bars[0].actions()) == 5
             assert (installed / "FX-tyPreview.hsx").is_file(), "Hotkey install failed"
             assigned = ET.parse(str(installed / "FX-tyPreview.hsx")).getroot()
@@ -46,7 +46,7 @@ def main():
                        and n.get("Id") == "647394-FX_TyPreview`FX" for n in assigned)
             after = list((installed / "backups").glob("*/After-FX.hsx"))
             assert len(after) == attempt + 1, "Max did not verify shortcut"
-            checks.append("Native MZP installation %d: nine macros, one toolbar, five icons, Shift+V verified by Max" % (attempt + 1))
+            checks.append("Native MZP installation %d: ten macros, one toolbar, five icons, Shift+V verified by Max" % (attempt + 1))
         rt.macros.run("FX", "FX_CopyPath")  # Unsaved scene: must be a no-op.
         rt.fileIn(str(run / "userStartupScripts/FXToolkit_startup.ms"))
         QtWidgets.QApplication.processEvents()

@@ -5,6 +5,7 @@
   {"macro":"FX_Toolbox","label":"Toolbox","kind":"maxscript","path":"Q:\\fx\\fx_tools\\3dsMax\\Scene\\Toolbox\\ToolBox.ms"},
   {"macro":"FX_TyFlowOpen","label":"tyFlow Open","kind":"maxscript","path":"Q:\\fx\\fx_tools\\3dsMax\\Systems\\tyFlow Open Editor\\tyFlow_open_editor.ms","icon":"tyFlow"},
   {"macro":"FX_CopyPath","label":"Copy Path","kind":"copy_path"},
+  {"macro":"FX_CachesPath","label":"Caches Path","kind":"cache_path","path":"Q:\\fx\\fx_tools\\3dsMax\\Scene\\lib\\FXSceneContext.ms"},
   {"macro":"FX_TyPreview","label":"tyPreview","kind":"maxscript","path":"Q:\\fx\\fx_tools\\3dsMax\\Scene\\tyPreview\\tyPreview_Spirit_FX.ms"},
   {"macro":"FX_GeoInspectorPro","label":"GeoInspector Pro","kind":"maxscript","path":"Q:\\fx\\fx_tools\\3dsMax\\Systems\\GeoinspectorPro\\GeoInspector Pro.mse","icon":"geoInspectorPro"},
   {"macro":"FX_Footages","label":"Footages","kind":"maxscript","path":"Q:\\fx\\fx_tools\\3dsMax\\Scene\\FootageFolder\\Footage_Folder.ms"}

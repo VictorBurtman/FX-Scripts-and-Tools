@@ -1,6 +1,7 @@
 """Runs inside Max after native MZP extraction; never executes a network tool."""
 import datetime
 import importlib.util
+import json
 from pathlib import Path
 import shutil
 import sys
@@ -57,7 +58,8 @@ def install(source):
         status = "Shift+V: tyPreview.\nPrevious hotkeys: " + str(saved)
     except Exception as exc:
         status = "Shift+V was NOT installed: " + str(exc) + "\nUse Customize > Hotkey Editor > FX > tyPreview."
-    message = ("FX toolbar and 9 macros installed.\n\n" + status +
+    tool_count = len(json.loads((target / "tools.json").read_text(encoding="utf-8")))
+    message = ("FX toolbar and %d macros installed.\n\n" % tool_count + status +
                "\n\nNetwork scripts are loaded from Q: when clicked.")
     if getattr(rt, "FXToolkitInstallSilent", False) == True:
         print(message)

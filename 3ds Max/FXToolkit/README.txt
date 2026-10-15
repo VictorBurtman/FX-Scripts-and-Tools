@@ -3,8 +3,8 @@ FX TOOLKIT NETWORK - cible : 3ds Max 2022 / Python 3 / PySide2
 INSTALLATION
 Glisser dist/FXToolkit_Network.mzp dans un viewport de 3ds Max.
 La barre FX apparait en haut. Elle est deplacable et detachable.
-Ses neuf boutons appellent des macros de la categorie FX :
-Patafix, PrepFX, Vecmap, Toolbox, tyFlow Open, Copy Path, tyPreview,
+Ses dix boutons appellent des macros de la categorie FX :
+Patafix, PrepFX, Vecmap, Toolbox, tyFlow Open, Copy Path, Caches Path, tyPreview,
 GeoInspector Pro, Footages.
 Les outils avec icones utilisent les fichiers originaux, sauf PrepFX dont
 le nouveau symbole est un cube turquoise avec une coche. Les autres ont
@@ -29,17 +29,38 @@ Une erreur indique le chemin exact si le fichier est absent.
 Vecmap necessite vecmap.py ET le dossier vecmap_lib sur le serveur.
 Les dependances propres aux outils restent celles de leurs projets.
 
+DEPLOIEMENT SERVEUR
+Decompresser dist/FXToolkit_Server.zip et copier ses dossiers Scene et
+Systems dans Q:\fx\fx_tools\3dsMax\.
+Conserver le fichier Scene\lib\productions.cfg s'il a deja ete personnalise.
+Les deux paquets a distribuer sont FXToolkit_Network.mzp pour les postes
+et FXToolkit_Server.zip pour le serveur (bibliotheque et GeoInspector).
+Les depots sources et le lecteur Q: ne sont pas modifies par le build.
+
 GEOINSPECTOR PRO
-Decompresser dist/GeoInspectorPro_Server.zip et copier son dossier
-GeoinspectorPro dans Q:\fx\fx_tools\3dsMax\Systems\.
 Le fichier attendu est :
 Q:\fx\fx_tools\3dsMax\Systems\GeoinspectorPro\GeoInspector Pro.mse
 Le .mse existant est utilise, comme dans le paquet original. Les images
 internes et les icones GeoInspector sont installees dans #userIcons.
 Le lanceur GeoInspector est inclus dans FXToolkit_Network.mzp.
-Les deux paquets a distribuer sont FXToolkit_Network.mzp pour les postes
-et GeoInspectorPro_Server.zip pour le serveur.
-Les depots sources et le lecteur Q: ne sont pas modifies par le build.
+
+CACHES PATH / BIBLIOTHEQUE PARTAGEE
+Le bouton charge Q:\fx\fx_tools\3dsMax\Scene\lib\FXSceneContext.ms,
+detecte la production, l'episode et le shot de la scene sauvegardee,
+cree les dossiers de cache manquants puis copie le chemin dans le pressepapier.
+Pour une prod Max : <racine>\<episode>\fx\3D_Sources\<shot>
+Pour pipeline=maya_shots : <racine>\<episode>\<shot>\fx\wip\3d\datas
+3D_Sources (avec un s) et le departement fx sont fixes.
+Le registre Scene\lib\productions.cfg pointe par defaut vers le CFG PrepFX
+existant, relu a chaque appel. Une nouvelle prod ajoutee dans PrepFX est donc
+prise en compte sans reconstruire le MZP. On peut aussi stocker directement
+les lignes prod: dans ce registre ; cela ne reconfigure pas PrepFX lui-meme.
+Une scene non sauvegardee, hors production, ambigue ou incoherente produit
+une erreur. Un lecteur indisponible ou un echec de creation ne copie rien.
+La racine de production et l'episode doivent deja exister (ainsi que le shot
+pour Maya) ; les dossiers de caches sont crees recursivement si necessaire.
+L'API MAXScript et son utilisation depuis Python sont documentees dans
+server/Scene/lib/README.txt, egalement inclus dans le ZIP serveur.
 
 SHIFT+V / TYPREVIEW
 L'installateur exporte le jeu de raccourcis courant avec actionMan,
@@ -62,7 +83,8 @@ Pour n'annuler que Shift+V, utiliser le Hotkey Editor manuellement.
 CONSTRUCTION
 Python 3, aucune dependance externe :
   python build.py
-Pour aussi generer le ZIP serveur GeoInspector :
+Les deux archives sont reconstruites ; le .mse GeoInspector du ZIP precedent
+est conserve. Pour le remplacer depuis le depot GeoInspector :
   python build.py --geo-repo "C:\Users\victo\Documents\GitHub\GeoInspectorPro"
 Le build refuse un .mse plus ancien que le .ms present dans ce depot.
 Les icones sont embarquees dans package/icons : le build normal est autonome.
@@ -74,23 +96,30 @@ Pour changer un chemin, modifier tools.json puis reconstruire le paquet.
 Tests hors Max : python -m unittest discover -s tests -p "test_*.py"
 
 VERIFICATION DANS MAX 2022
-1. Installer le MZP, verifier les neuf boutons et les cinq icones.
+1. Deployer le ZIP serveur, installer le MZP, verifier dix boutons et cinq icones.
 2. Cliquer chaque outil avec Q: accessible ; tester Copy Path sur une scene
    sauvegardee et une scene sans chemin.
 3. Verifier Shift+V dans le viewport puis dans le Hotkey Editor.
 4. Reinstaller : une seule barre ; les autres raccourcis restent presents.
 5. Redemarrer Max : la barre revient et Shift+V conserve son affectation.
 6. Verifier le comportement hors reseau et la restauration Before-FX.hsx.
+7. Tester Caches Path sur une scene Max puis Maya : chemin copie correct,
+   creation des dossiers manquants et preservation des fichiers existants.
+   Tester aussi une scene non sauvegardee et un chemin hors production.
 Les tests Max Batch fournis peuvent verifier l'installation dans des
 dossiers temporaires. Un test sous 2027 ne remplace pas une recette 2022.
 
-RESULTATS DU 12 OCTOBRE 2026
-Cinq tests Python reussis : contenu de l'archive, syntaxe Python 3.7,
+RESULTATS DU 15 OCTOBRE 2026
+Six tests Python reussis : contenu des archives, syntaxe Python 3.7,
 preservation des autres raccourcis/contextes et reapplication sans doublon.
 Test reel sous 3ds Max Batch 2027 (29.0.0.3590) reussi : installation MZP,
-reinstallation, neuf macros, une seule barre, cinq icones, affectation
+reinstallation, dix macros, une seule barre, cinq icones, affectation
 Shift+V relue depuis Max, bootstrap de demarrage et Copy Path sans scene
 sauvegardee.
+Bibliotheque MAXScript testee dans Max Batch 2027 : les deux chemins studio
+fournis, variantes de noms, CFG relu en direct, chemins UNC, cas invalides,
+creation recursive et repetition sans perte de donnees. Ces tests utilisent
+des dossiers temporaires ; ils ne modifient ni le reseau ni le pressepapier.
 Max 2022 et l'execution des outils sur le serveur Q: restent a verifier.
 
 SOURCES TECHNIQUES AUTODESK

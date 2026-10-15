@@ -1,4 +1,4 @@
-"""Build the FX Toolkit MZP and optional server ZIP using the standard library."""
+"""Build the FX Toolkit MZP and server ZIP using the standard library."""
 import argparse
 import json
 from pathlib import Path
@@ -13,8 +13,12 @@ def macro_source(tool, category="FX", name=None):
     if tool["kind"] == "copy_path":
         body = 'if maxfilepath != "" do setclipboardText maxfilepath'
     else:
-        command = ('python.executeFile scriptPath throwOnError:true clearUndoBuffer:false'
-                   if tool["kind"] == "python" else 'fileIn scriptPath')
+        if tool["kind"] == "python":
+            command = 'python.executeFile scriptPath throwOnError:true clearUndoBuffer:false'
+        elif tool["kind"] == "cache_path":
+            command = 'global FXSceneContext; fileIn scriptPath; FXSceneContext.copyCurrentCachePath()'
+        else:
+            command = 'fileIn scriptPath'
         body = '''local scriptPath = @"%s"
         if doesFileExist scriptPath then
         (
@@ -64,15 +68,33 @@ def build(geo_repo=None):
                     if required not in contents:
                         raise FileNotFoundError(required)
     write_zip(ROOT / "dist" / "FXToolkit_Network.mzp", contents)
+    server = {p.relative_to(ROOT / "server").as_posix(): p.read_bytes()
+              for p in (ROOT / "server").rglob("*") if p.is_file()}
+    geo_target = "Systems/GeoinspectorPro/GeoInspector Pro.mse"
     if geo_repo:
         source = Path(geo_repo)
         encrypted = source / "GeoInspector Pro.mse"
         plain = source / "GeoInspector Pro.ms"
         if plain.exists() and encrypted.stat().st_mtime < plain.stat().st_mtime:
             raise RuntimeError("GeoInspector Pro.mse is stale: re-encrypt it in 3ds Max first")
-        write_zip(ROOT / "dist" / "GeoInspectorPro_Server.zip", {
-            "GeoinspectorPro/GeoInspector Pro.mse": encrypted.read_bytes(),
-            "DEPLOY.txt": "Copy the GeoinspectorPro folder into Q:\\fx\\fx_tools\\3dsMax\\Systems\\.\nIcons are installed locally by the MZP.\n"})
+        server[geo_target] = encrypted.read_bytes()
+    else:
+        previous = ROOT / "dist" / "FXToolkit_Server.zip"
+        legacy = ROOT / "dist" / "GeoInspectorPro_Server.zip"
+        if previous.exists():
+            with zipfile.ZipFile(previous) as archive:
+                server[geo_target] = archive.read(geo_target)
+        elif legacy.exists():
+            with zipfile.ZipFile(legacy) as archive:
+                server[geo_target] = archive.read("GeoinspectorPro/GeoInspector Pro.mse")
+        else:
+            raise FileNotFoundError("Use --geo-repo for the first server build; no previous GeoInspector payload exists.")
+    server["DEPLOY.txt"] = (
+        "Copy Scene and Systems into Q:\\fx\\fx_tools\\3dsMax\\.\n"
+        "Keep an existing customized Scene\\lib\\productions.cfg when updating.\n"
+        "The supplied productions.cfg delegates to the live PrepFX\\prepFX.cfg.\n"
+        "See Scene\\lib\\README.txt for the shared MAXScript API.\n")
+    write_zip(ROOT / "dist" / "FXToolkit_Server.zip", server)
 
 
 if __name__ == "__main__":

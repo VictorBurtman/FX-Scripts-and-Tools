@@ -52,8 +52,8 @@ class PackageTests(unittest.TestCase):
         with zipfile.ZipFile(ROOT / "dist/FXToolkit_Network.mzp") as z:
             self.assertIsNone(z.testzip())
             tools = json.loads(z.read("tools.json"))
-            self.assertEqual(len(tools), 9)
-            self.assertEqual(len([n for n in z.namelist() if n.endswith(".mcr")]), 9)
+            self.assertEqual(len(tools), 10)
+            self.assertEqual(len([n for n in z.namelist() if n.endswith(".mcr")]), 10)
             self.assertIn('drop "install.ms"', z.read("mzp.run").decode())
             self.assertFalse(any(n.endswith(".mse") for n in z.namelist()))
             for tool in tools:
@@ -69,6 +69,17 @@ class PackageTests(unittest.TestCase):
             self.assertNotIn("icon:", preview)
             copy_path = z.read("macros/FX-FX_CopyPath.mcr").decode()
             self.assertIn('if maxfilepath != "" do setclipboardText maxfilepath', copy_path)
+            caches = z.read("macros/FX-FX_CachesPath.mcr").decode()
+            self.assertIn("FXSceneContext.copyCurrentCachePath()", caches)
+            self.assertNotIn("server/Scene/lib/FXSceneContext.ms", z.namelist())
+
+    def test_server_payload(self):
+        with zipfile.ZipFile(ROOT / "dist/FXToolkit_Server.zip") as z:
+            self.assertIsNone(z.testzip())
+            self.assertIn("Systems/GeoinspectorPro/GeoInspector Pro.mse", z.namelist())
+            for source in (ROOT / "server").rglob("*"):
+                if source.is_file():
+                    self.assertEqual(z.read(source.relative_to(ROOT / "server").as_posix()), source.read_bytes())
 
     def test_python_37_syntax(self):
         for source in (ROOT / "package").rglob("*.py"):
