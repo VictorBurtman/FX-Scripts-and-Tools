@@ -71,12 +71,18 @@ class PackageTests(unittest.TestCase):
             self.assertIn('if maxfilepath != "" do setclipboardText maxfilepath', copy_path)
             caches = z.read("macros/FX-FX_CachesPath.mcr").decode()
             self.assertIn("FXSceneContext.copyCurrentCachePath()", caches)
-            self.assertNotIn("server/Scene/lib/FXSceneContext.ms", z.namelist())
+            self.assertIn(r"Q:\fx\fx_tools\3dsMax\00_Lib\FXSceneContext.ms", caches)
+            self.assertFalse(any(n.endswith("FXSceneContext.ms") for n in z.namelist()))
 
     def test_server_payload(self):
         with zipfile.ZipFile(ROOT / "dist/FXToolkit_Server.zip") as z:
             self.assertIsNone(z.testzip())
-            self.assertIn("Systems/GeoinspectorPro/GeoInspector Pro.mse", z.namelist())
+            self.assertEqual(set(z.namelist()), {
+                "DEPLOY.txt", "00_Lib/FXSceneContext.ms", "00_Lib/productions.cfg", "00_Lib/README.txt",
+            })
+            cfg = z.read("00_Lib/productions.cfg").decode("utf-8")
+            self.assertEqual(sum(line.startswith("prod:") for line in cfg.splitlines()), 5)
+            self.assertNotIn("source:", cfg)
             for source in (ROOT / "server").rglob("*"):
                 if source.is_file():
                     self.assertEqual(z.read(source.relative_to(ROOT / "server").as_posix()), source.read_bytes())

@@ -17,9 +17,9 @@ def main():
     run = OUTPUT / uuid.uuid4().hex
     run.mkdir(parents=True)
     cfg = run / "productions.cfg"
-    example = (ROOT / "server/Scene/lib/productions.example.cfg").read_text(encoding="utf-8")
+    example = (ROOT / "server/00_Lib/productions.cfg").read_text(encoding="utf-8")
     cfg.write_text(example, encoding="utf-8-sig")
-    rt.fileIn(str(ROOT / "server/Scene/lib/FXSceneContext.ms"))
+    rt.fileIn(str(ROOT / "server/00_Lib/FXSceneContext.ms"))
     service = rt.FXSceneContext
     checks = []
 
@@ -58,6 +58,10 @@ def main():
         assert context.department == "fx"
         assert context.configPath == str(cfg)
         assert context.scenePath.lower().endswith(".max")
+    # The deployed library reads the adjacent registry without a config override.
+    default_context = service.resolve(cases[0][0])
+    assert default_context.cachePath == cases[0][-1]
+    assert default_context.configPath == str(ROOT / "server/00_Lib/productions.cfg")
     checks.append("Max and Maya layouts, case/separators, zero padding, filename fallback, shot suffix, named context fields")
 
     reject("", "Save the scene")
@@ -150,7 +154,7 @@ def main():
     checks.append("Read-only resolution; recursive, idempotent creation for both pipelines; missing episode and file collisions rejected")
 
     # Loading twice is supported for tools that fileIn the shared service on click.
-    rt.fileIn(str(ROOT / "server/Scene/lib/FXSceneContext.ms"))
+    rt.fileIn(str(ROOT / "server/00_Lib/FXSceneContext.ms"))
     assert rt.FXSceneContext.resolve(cases[0][0], configPath=str(cfg)).shot == "s0780"
     checks.append("Library can be reloaded by independent callers")
     return {"passed": True, "max_version": str(rt.maxVersion()), "checks": checks}

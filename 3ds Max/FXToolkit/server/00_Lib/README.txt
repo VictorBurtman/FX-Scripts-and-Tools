@@ -1,20 +1,14 @@
 FX SCENE CONTEXT - shared MAXScript library (target: 3ds Max 2022)
 
 DEPLOYMENT
-Copy this lib folder to Q:\fx\fx_tools\3dsMax\Scene\lib\.
+Copy this 00_Lib folder to Q:\fx\fx_tools\3dsMax\00_Lib\.
 FXSceneContext.ms and productions.cfg must be alongside each other.
 No Python package, local installation, or admin rights are required by the
 library. The Toolkit's Caches Path macro loads it from Q: on each click.
 Keep your customized productions.cfg when deploying subsequent updates.
 
 PRODUCTION REGISTRY
-The supplied productions.cfg delegates to the existing live PrepFX config:
-  source:Q:\fx\fx_tools\3dsMax\Scene\PrepFX\prepFX.cfg
-This avoids maintaining two independent production lists. Changes to PrepFX's
-registry are read on the next lookup; nothing is cached between calls.
-
-Alternatively, replace the source: line with production records directly in
-productions.cfg, using productions.example.cfg as a starting point:
+productions.cfg is the active registry and contains production records directly:
   prod:Alice2|S:\alice2\production|S:\alice2_footage\production
   prod:BES2|S:\bes2\shots|S:\bes2_footage\shots|pipeline=maya_shots
 
@@ -27,11 +21,13 @@ Additional key=value specs are preserved in options for other tools.
 Other PrepFX setting lines are ignored. Duplicate names/roots/options fail.
 Use either prod: records or one source: directive, never both. A source can
 also be relative to the CFG. Missing files and source cycles are errors;
-the example registry is never used as an automatic fallback.
+there is no automatic fallback to PrepFX's configuration.
 
-Moving the records into lib does not automatically reconfigure PrepFX.
-Keep the default source: delegation until PrepFX is updated to use this
-shared registry. Its existing loader does not understand source: directives.
+Changes are read on the next lookup; nothing is cached between calls.
+There is no separate example CFG to deploy.
+PrepFX has not been changed: keep its existing prepFX.cfg until its loader
+is migrated separately to this shared productions.cfg. During that transition,
+changes needed by both tools must be applied to both registries.
 
 DETECTION AND CACHE LAYOUTS
 The configured scene root determines the production, not its display name.
@@ -63,7 +59,7 @@ Unavailable shares, permissions and file/directory conflicts raise errors.
 Clipboard copying happens only after directory creation succeeds.
 
 MAXSCRIPT API
-  fileIn @"Q:\fx\fx_tools\3dsMax\Scene\lib\FXSceneContext.ms"
+  fileIn @"Q:\fx\fx_tools\3dsMax\00_Lib\FXSceneContext.ms"
   ctx = FXSceneContext.current()
   format "% / % / %\n" ctx.production ctx.episode ctx.shot
   cache = ctx.cachePath
@@ -92,7 +88,7 @@ Loading the library itself has no directory or clipboard side effects.
 
 PYTHON IN 3DS MAX (same library, no duplicate parsing)
   from pymxs import runtime as rt
-  rt.fileIn(r"Q:\fx\fx_tools\3dsMax\Scene\lib\FXSceneContext.ms")
+  rt.fileIn(r"Q:\fx\fx_tools\3dsMax\00_Lib\FXSceneContext.ms")
   ctx = rt.FXSceneContext.current()
   print(ctx.production, ctx.episode, ctx.shot, ctx.cachePath)
   values = list(ctx.asArray())

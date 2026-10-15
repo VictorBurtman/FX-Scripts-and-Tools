@@ -30,11 +30,10 @@ Vecmap necessite vecmap.py ET le dossier vecmap_lib sur le serveur.
 Les dependances propres aux outils restent celles de leurs projets.
 
 DEPLOIEMENT SERVEUR
-Decompresser dist/FXToolkit_Server.zip et copier ses dossiers Scene et
-Systems dans Q:\fx\fx_tools\3dsMax\.
-Conserver le fichier Scene\lib\productions.cfg s'il a deja ete personnalise.
+Decompresser dist/FXToolkit_Server.zip et copier son dossier 00_Lib dans Q:\fx\fx_tools\3dsMax\.
+Conserver le fichier 00_Lib\productions.cfg s'il a deja ete personnalise.
 Les deux paquets a distribuer sont FXToolkit_Network.mzp pour les postes
-et FXToolkit_Server.zip pour le serveur (bibliotheque et GeoInspector).
+et FXToolkit_Server.zip pour le serveur (bibliotheque et productions).
 Les depots sources et le lecteur Q: ne sont pas modifies par le build.
 
 GEOINSPECTOR PRO
@@ -43,24 +42,28 @@ Q:\fx\fx_tools\3dsMax\Systems\GeoinspectorPro\GeoInspector Pro.mse
 Le .mse existant est utilise, comme dans le paquet original. Les images
 internes et les icones GeoInspector sont installees dans #userIcons.
 Le lanceur GeoInspector est inclus dans FXToolkit_Network.mzp.
+Le script serveur deja installe ne figure plus dans le ZIP serveur.
 
 CACHES PATH / BIBLIOTHEQUE PARTAGEE
-Le bouton charge Q:\fx\fx_tools\3dsMax\Scene\lib\FXSceneContext.ms,
+Le bouton charge Q:\fx\fx_tools\3dsMax\00_Lib\FXSceneContext.ms,
 detecte la production, l'episode et le shot de la scene sauvegardee,
 cree les dossiers de cache manquants puis copie le chemin dans le pressepapier.
 Pour une prod Max : <racine>\<episode>\fx\3D_Sources\<shot>
 Pour pipeline=maya_shots : <racine>\<episode>\<shot>\fx\wip\3d\datas
 3D_Sources (avec un s) et le departement fx sont fixes.
-Le registre Scene\lib\productions.cfg pointe par defaut vers le CFG PrepFX
-existant, relu a chaque appel. Une nouvelle prod ajoutee dans PrepFX est donc
-prise en compte sans reconstruire le MZP. On peut aussi stocker directement
-les lignes prod: dans ce registre ; cela ne reconfigure pas PrepFX lui-meme.
+Le registre 00_Lib\productions.cfg contient directement les cinq productions
+Alice2, BES2, Borrowers, Oum3 et smurfs. Il est relu a chaque appel.
+Modifier cette liste ne necessite pas de reconstruire le MZP.
+Aucun fichier example.cfg n'est distribue.
+PrepFX reste inchange : conserver son ancien prepFX.cfg jusqu'a l'adaptation
+ulterieure de son lecteur. Durant cette transition, les changements communs
+aux deux outils doivent etre reportes dans les deux fichiers.
 Une scene non sauvegardee, hors production, ambigue ou incoherente produit
 une erreur. Un lecteur indisponible ou un echec de creation ne copie rien.
 La racine de production et l'episode doivent deja exister (ainsi que le shot
 pour Maya) ; les dossiers de caches sont crees recursivement si necessaire.
 L'API MAXScript et son utilisation depuis Python sont documentees dans
-server/Scene/lib/README.txt, egalement inclus dans le ZIP serveur.
+server/00_Lib/README.txt, egalement inclus dans le ZIP serveur.
 
 SHIFT+V / TYPREVIEW
 L'installateur exporte le jeu de raccourcis courant avec actionMan,
@@ -83,10 +86,8 @@ Pour n'annuler que Shift+V, utiliser le Hotkey Editor manuellement.
 CONSTRUCTION
 Python 3, aucune dependance externe :
   python build.py
-Les deux archives sont reconstruites ; le .mse GeoInspector du ZIP precedent
-est conserve. Pour le remplacer depuis le depot GeoInspector :
-  python build.py --geo-repo "C:\Users\victo\Documents\GitHub\GeoInspectorPro"
-Le build refuse un .mse plus ancien que le .ms present dans ce depot.
+Les deux archives sont reconstruites depuis les sources du present depot.
+Le build ne depend plus du depot ou d'un ancien ZIP GeoInspector.
 Les icones sont embarquees dans package/icons : le build normal est autonome.
 Le visuel source PrepFX est conserve dans assets/prepfx-source.png.
 Pour reexporter ses variantes BMP/alpha, PNG et ICO :

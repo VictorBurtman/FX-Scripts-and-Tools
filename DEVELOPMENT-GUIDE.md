@@ -19,7 +19,7 @@ PySide2. The toolbar also supports PySide6 for newer Max versions.
 | `package/runtime/hotkeys.py` | XML transformations that preserve existing hotkey customizations. |
 | `package/FXToolkit_startup.ms`, `package/runtime/bootstrap.py` | Recreate the toolbar when Max starts. |
 | `package/icons/`, `assets/` | Distributed icons and the generated PrepFX artwork/prompt. |
-| `server/Scene/lib/` | Shared MAXScript scene context library, production registry entry point, examples, and API documentation. |
+| `server/00_Lib/` | Shared MAXScript scene context library, production records and API documentation. |
 | `tests/` | Package/hotkey unit tests and native Max Batch installation and scene context tests. |
 | `dist/` | The complete `FXToolkit_Network.mzp` and `FXToolkit_Server.zip`. |
 
@@ -36,30 +36,35 @@ Copy Path, Caches Path, tyPreview, GeoInspector Pro, and Footages. Network tools
 from the paths in `tools.json` when clicked; their sources are not installed
 locally. Copy Path copies `maxfilepath` only when it is nonempty.
 
-Deploy `Scene` and `Systems` from `FXToolkit_Server.zip` into
-`Q:\fx\fx_tools\3dsMax\`. This installs the library and keeps GeoInspector at:
+Deploy `00_Lib` from `FXToolkit_Server.zip` into
+`Q:\fx\fx_tools\3dsMax\`. The ZIP contains the library, its production
+registry, documentation, and deployment instructions. GeoInspector is already
+deployed separately and is no longer bundled in this ZIP.
 
-```text
-Q:\fx\fx_tools\3dsMax\Systems\GeoinspectorPro\GeoInspector Pro.mse
-```
+The build prepares files locally and does not deploy them to Q:. Install the
+updated MZP so Caches Path uses the new `00_Lib` location. Other network tools
+continue using the paths in `tools.json`.
 
-The server ZIP replaces `GeoInspectorPro_Server.zip`; distribute only this
-ZIP and the complete MZP. The build prepares files locally and does not deploy
-them to Q:. Deploy the library before using Caches Path on client machines.
+The deployed library folder needs `FXSceneContext.ms` and `productions.cfg`
+side by side; `README.txt` is documentation only. When migrating from
+`Scene\lib`, copy the new production records into `00_Lib\productions.cfg`
+instead of retaining the old `source:` redirect to PrepFX. Reinstall the MZP
+on each workstation to update the macro's stored path. The old example CFG
+is no longer used or distributed.
 
 Vecmap needs both `vecmap.py` and `vecmap_lib` on the server. Other tool
 dependencies remain the responsibility of their source projects.
 
 ### Shared scene context
 
-`Scene/lib/FXSceneContext.ms` detects production, episode, and shot and returns
+`00_Lib/FXSceneContext.ms` detects production, episode, and shot and returns
 a struct with named fields including `production`, `pipeline`, `episode`,
 `shot`, and `cachePath`. Call `FXSceneContext.current()` for the open scene or
 `FXSceneContext.resolve fullScenePath` for an explicit path. Both only read.
 Python tools can call the same functions through `pymxs.runtime`:
 
 ```maxscript
-fileIn @"Q:\fx\fx_tools\3dsMax\Scene\lib\FXSceneContext.ms"
+fileIn @"Q:\fx\fx_tools\3dsMax\00_Lib\FXSceneContext.ms"
 ctx = FXSceneContext.current()
 cache = ctx.cachePath -- read only
 FXSceneContext.ensureCacheDirectory ctx -- create missing cache folders
@@ -67,21 +72,23 @@ FXSceneContext.ensureCacheDirectory ctx -- create missing cache folders
 
 ```python
 from pymxs import runtime as rt
-rt.fileIn(r"Q:\fx\fx_tools\3dsMax\Scene\lib\FXSceneContext.ms")
+rt.fileIn(r"Q:\fx\fx_tools\3dsMax\00_Lib\FXSceneContext.ms")
 ctx = rt.FXSceneContext.current()
 print(ctx.production, ctx.episode, ctx.shot, ctx.cachePath)
 ```
 
-The adjacent `productions.cfg` delegates to the live PrepFX CFG by default,
-avoiding duplicate production lists. It can instead contain compatible
-`prod:Name|SceneRoot|FootageRoot|key=value` records. Preserve customized CFGs
-when deploying updates. Every lookup rereads the registry; missing or invalid
-configuration fails instead of silently using example productions.
-The default directive is
-`source:Q:\fx\fx_tools\3dsMax\Scene\PrepFX\prepFX.cfg`. Without a pipeline
-option, records use `max_legacy`; arbitrary `key=value` metadata is retained
-in `options`. Moving records into this registry does not reconfigure PrepFX,
-whose current loader does not support the `source:` directive.
+The adjacent `productions.cfg` contains the production records directly:
+`prod:Name|SceneRoot|FootageRoot|key=value`. The supplied list contains Alice2,
+BES2, Borrowers, Oum3, and smurfs. Without a pipeline option, records use
+`max_legacy`; BES2 uses `pipeline=maya_shots`. Arbitrary metadata is retained
+in `options`. Every lookup rereads this file; missing or invalid configuration
+fails without falling back to PrepFX. Preserve customized CFGs on updates.
+There is no separate example CFG.
+
+PrepFX has deliberately not been modified. Keep its existing `prepFX.cfg`
+until its loader is migrated to `Q:\fx\fx_tools\3dsMax\00_Lib\productions.cfg`.
+During this transition, production edits needed by both tools must be applied
+to both registries.
 
 The Caches Path macro loads this library, resolves the saved scene, creates
 missing cache folders, then copies the path. Max productions use
@@ -94,7 +101,7 @@ recursively; existing files are preserved. The clipboard changes only after
 creation succeeds. Scene resolution compares configured roots on directory
 boundaries, prefers the longest match, and checks recognized filenames
 against episode/shot folders.
-See [the library README](3ds%20Max/FXToolkit/server/Scene/lib/README.txt) for
+See [the library README](3ds%20Max/FXToolkit/server/00_Lib/README.txt) for
 the complete schema, API, and usage examples. Add productions in the active
 CFG without rebuilding the MZP; add pipeline layouts in the shared library
 with corresponding native tests.
@@ -119,14 +126,8 @@ python build.py
 python -m unittest discover -s tests -p "test_*.py"
 ```
 
-Both archives are rebuilt. By default the existing server ZIP supplies the
-unchanged GeoInspector payload. To update it from its source repository:
-
-```powershell
-python build.py --geo-repo "C:\path\to\GeoInspectorPro"
-```
-
-The builder rejects an encrypted `.mse` older than its accompanying `.ms`.
+Both archives are rebuilt directly from this repository. No GeoInspector
+source repository or previous server archive is required.
 Edit `tools.json` for path/button changes, then rebuild; do not edit generated
 macros inside the archive. Keep macro identities stable to preserve shortcuts.
 To re-export PrepFX icons, run `python export_prepfx_icons.py` with Pillow
@@ -145,7 +146,8 @@ network launches, and Shift+V on the target Max version.
 
 Six package tests, ten-action installation/reinstallation, and the native
 scene context tests passed in Max Batch 2027 on October 15, 2026. The context
-tests include both user-provided studio paths and temporary cache directories.
+tests include both user-provided studio paths, temporary cache directories,
+and automatic discovery of the adjacent registry after the move to `00_Lib`.
 This does not replace testing on Max 2022 and the studio
 network. Custom toolbar positioning across sessions is not guaranteed.
 
