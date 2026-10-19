@@ -12,6 +12,9 @@ However, resale of these content is strictly __prohibited__.
 
 ## What's Inside
 
+FX Toolkit is now maintained in its dedicated repository:
+[startup_toolkit](https://github.com/VictorBurtman/startup_toolkit).
+
 - **MaxScript**: MaxScript is the native scripting language for 3ds Max. You can drag and drop the `.ms` files into 3ds Max to run them, or create a custom macro for quick access.
   
 - **Max Files**: Some setups not only involve scripting but require a full scene, including rigs, tyFlow setups, objects, etc.
